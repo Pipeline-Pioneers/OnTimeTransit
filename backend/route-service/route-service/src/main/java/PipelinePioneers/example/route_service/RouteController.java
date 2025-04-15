@@ -6,34 +6,24 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/routes")
 public class RouteController {
-    private final RouteService service;
+    private final RouteService routeService;
 
-    public RouteController(RouteService service) {
-        this.service = service;
+    public RouteController(RouteService routeService) {
+        this.routeService = routeService;
     }
 
     @GetMapping
     public List<Route> getAllRoutes() {
-        return service.getAllRoutes();
+        return routeService.getAllRoutes();
     }
 
     @PostMapping
     public Route createRoute(@RequestBody Route route) {
-        return service.saveRoute(route);
-    }
-
-    @PutMapping("/{id}")
-    public Route updateRoute(@PathVariable Long id, @RequestBody Route route) {
-        return service.updateRoute(id, route);
+        return routeService.saveRoute(route);
     }
 
     @DeleteMapping("/{id}")
     public void deleteRoute(@PathVariable Long id) {
-        service.deleteRoute(id);
-    }
-
-    @GetMapping("/test-db")
-    public String testDatabaseConnection() {
-        return "Database connection is successful!";
+        routeService.deleteRoute(id);
     }
 }

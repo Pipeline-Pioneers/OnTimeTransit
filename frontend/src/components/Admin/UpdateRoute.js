@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ApiService } from "../../services/ApiService";
 
-function AddRoute() {
+function UpdateRoute() {
+  const { id } = useParams(); // Get the route ID from the URL
   const [route, setRoute] = useState({
     startPoint: "",
     endPoint: "",
@@ -13,6 +14,16 @@ function AddRoute() {
   });
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Fetch the existing route details
+    ApiService.getRouteById(id)
+      .then((data) => setRoute(data))
+      .catch((error) => {
+        toast.error("Failed to fetch route details.");
+        console.error("Error fetching route:", error);
+      });
+  }, [id]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setRoute({ ...route, [name]: value });
@@ -20,20 +31,20 @@ function AddRoute() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    ApiService.addRoute(route)
+    ApiService.updateRoute(id, route)
       .then(() => {
-        toast.success("Route added successfully!");
+        toast.success("Route updated successfully!");
         navigate("/admin/routes"); // Redirect to the route list page
       })
       .catch((error) => {
-        toast.error("Failed to add route. Please try again.");
-        console.error("Error adding route:", error);
+        toast.error("Failed to update route. Please try again.");
+        console.error("Error updating route:", error);
       });
   };
 
   return (
     <div className="container mt-5">
-      <h2>Add Route</h2>
+      <h2>Update Route</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Start Point</label>
@@ -90,11 +101,11 @@ function AddRoute() {
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Add Route
+          Update Route
         </button>
       </form>
     </div>
   );
 }
 
-export default AddRoute;
+export default UpdateRoute;
