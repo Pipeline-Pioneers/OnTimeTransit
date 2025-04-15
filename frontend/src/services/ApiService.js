@@ -7,12 +7,19 @@ const USER_SERVICE_URL = "http://localhost:8084/api/auth";
 const NOTIFICATION_SERVICE_URL = "http://localhost:8085/api/notifications";
 const ANALYTICS_SERVICE_URL = "http://localhost:8086/api/analytics";
 
-export const ApiService = {
+const ApiService = {
   // Routes
-  getRoutes: () => axios.get(`${ROUTE_SERVICE_URL}`).then((res) => res.data),
-  addRoute: (route) => axios.post(`${ROUTE_SERVICE_URL}`, route).then((res) => res.data),
+  getRoutes: async () => {
+    const response = await axios.get(ROUTE_SERVICE_URL);
+    return response.data;
+  },
+  getRouteById: (id) => axios.get(`${ROUTE_SERVICE_URL}/${id}`).then((response) => response.data),
+  addRoute: (route) => axios.post(ROUTE_SERVICE_URL, route).then((response) => response.data),
   updateRoute: (id, route) => axios.put(`${ROUTE_SERVICE_URL}/${id}`, route).then((res) => res.data),
-  deleteRoute: (id) => axios.delete(`${ROUTE_SERVICE_URL}/${id}`).then((res) => res.data),
+  deleteRoute: async (id) => {
+    const response = await axios.delete(`${ROUTE_SERVICE_URL}/${id}`);
+    return response.data;
+  },
 
   // Schedules
   getSchedules: () => axios.get(`${SCHEDULE_SERVICE_URL}`).then((res) => res.data),
@@ -41,3 +48,5 @@ export const ApiService = {
   getAnalyticsSummary: () =>
     axios.get(`${ANALYTICS_SERVICE_URL}/summary`).then((res) => res.data),
 };
+
+export { ApiService };

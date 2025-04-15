@@ -1,26 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ApiService } from "../../services/ApiService";
 
 function BookTicket() {
+  const location = useLocation();
+  const preselectedRoute = location.state?.route;
+
   const [ticket, setTicket] = useState({
     passengerName: "",
     email: "",
     phoneNumber: "",
-    routeName: "",
+    routeName: preselectedRoute
+      ? `${preselectedRoute.startPoint} - ${preselectedRoute.endPoint}`
+      : "",
     travelDateTime: "",
     seatNumber: "",
   });
-  const [routes, setRoutes] = useState([]); // State to store available routes
+  const [routes, setRoutes] = useState([]);
+  const [availableSeats, setAvailableSeats] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   // Fetch available routes on component mount
   useEffect(() => {
+    setLoading(true);
     ApiService.getRoutes()
       .then((data) => setRoutes(data))
-      .catch((error) => console.error("Error fetching routes:", error));
+      .catch((error) => toast.error("Failed to fetch routes."))
+      .finally(() => setLoading(false));
   }, []);
+
+  // Fetch available seats when a route is selected
+  useEffect(() => {
+    if (ticket.routeName) {
+      ApiService.getTickets(ticket.routeName)
+        .then((data) => {
+          const bookedSeats = data.map((ticket) => ticket.seatNumber);
+          const allSeats = Array.from({ length: 50 }, (_, i) => i + 1); // Assuming 50 seats
+          setAvailableSeats(allSeats.filter((seat) => !bookedSeats.includes(seat)));
+        })
+        .catch((error) => toast.error("Failed to fetch seat availability."));
+    }
+  }, [ticket.routeName]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,20 +51,38 @@ function BookTicket() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Client-side validation
+    if (!/^\S+@\S+\.\S+$/.test(ticket.email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+    if (!/^\d{10}$/.test(ticket.phoneNumber)) {
+      toast.error("Please enter a valid 10-digit phone number.");
+      return;
+    }
+    if (!availableSeats.includes(Number(ticket.seatNumber))) {
+      toast.error("Selected seat is not available.");
+      return;
+    }
+
+    setLoading(true);
     ApiService.bookTicket(ticket)
-        .then(() => {
-            toast.success("Ticket booked successfully!");
-            navigate("/user/tickets");
-        })
-        .catch((error) => {
-            toast.error("Failed to book ticket. Please try again.");
-            console.error("Error booking ticket:", error);
-        });
+      .then(() => {
+        toast.success("Ticket booked successfully!");
+        navigate("/user/tickets");
+      })
+      .catch((error) => {
+        toast.error("Failed to book ticket. Please try again.");
+        console.error("Error booking ticket:", error);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <div className="container mt-5">
       <h2>Book Ticket</h2>
+      {loading && <div className="spinner-border text-primary" role="status"><span className="visually-hidden">Loading...</span></div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Passenger Name</label>
@@ -53,6 +93,7 @@ function BookTicket() {
             value={ticket.passengerName}
             onChange={handleChange}
             required
+            placeholder="Enter your full name"
           />
         </div>
         <div className="mb-3">
@@ -64,6 +105,7 @@ function BookTicket() {
             value={ticket.email}
             onChange={handleChange}
             required
+            placeholder="Enter your email"
           />
         </div>
         <div className="mb-3">
@@ -75,6 +117,7 @@ function BookTicket() {
             value={ticket.phoneNumber}
             onChange={handleChange}
             required
+            placeholder="Enter your 10-digit phone number"
           />
         </div>
         <div className="mb-3">
@@ -107,16 +150,24 @@ function BookTicket() {
         </div>
         <div className="mb-3">
           <label className="form-label">Seat Number</label>
-          <input
-            type="number"
+          <select
             className="form-control"
             name="seatNumber"
             value={ticket.seatNumber}
             onChange={handleChange}
             required
-          />
+          >
+            <option value="">Select a Seat</option>
+            {availableSeats.map((seat) => (
+              <option key={seat} value={seat}>
+                {seat}
+              </option>
+            ))}
+          </select>
         </div>
-        <button type="submit" className="btn btn-primary">Book Ticket</button>
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? "Booking..." : "Book Ticket"}
+        </button>
       </form>
     </div>
   );
