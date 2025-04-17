@@ -8,19 +8,27 @@ import org.springframework.http.ResponseEntity;
 public class AuthController {
     private final AuthService authService;
 
-    // Constructor injection for AuthService
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User user) {
-        authService.register(user);
-        return ResponseEntity.ok("User registered successfully!");
+        try {
+            authService.register(user);
+            return ResponseEntity.ok("User registered successfully!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody User user) {
-        return ResponseEntity.ok(authService.login(user));
+        try {
+            String message = authService.login(user);
+            return ResponseEntity.ok(message);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

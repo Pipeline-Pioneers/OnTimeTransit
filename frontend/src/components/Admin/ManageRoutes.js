@@ -34,28 +34,21 @@ function ManageRoutes() {
   const handleAddRoute = (e) => {
     e.preventDefault();
     ApiService.addRoute(newRoute)
-      .then((route) => {
-        toast.success("Route added successfully!");
-        setRoutes((prevRoutes) => [...prevRoutes, route]);
-        setNewRoute({
-          startPoint: "",
-          endPoint: "",
-          intermediateStops: "",
-          distance: "",
-          estimatedTravelTime: "",
-        });
-      })
-      .catch((error) => toast.error("Failed to add route."));
+        .then((route) => {
+            toast.success("Route added successfully!");
+            setRoutes((prevRoutes) => [...prevRoutes, route]);
+        })
+        .catch((error) => toast.error("Failed to add route."));
   };
 
   // Handle deleting a route
   const handleDeleteRoute = (routeId) => {
     ApiService.deleteRoute(routeId)
-      .then(() => {
-        toast.success("Route deleted successfully!");
-        setRoutes((prevRoutes) => prevRoutes.filter((route) => route.id !== routeId));
-      })
-      .catch((error) => toast.error("Failed to delete route."));
+        .then(() => {
+            toast.success("Route deleted successfully!");
+            setRoutes((prevRoutes) => prevRoutes.filter((route) => route.id !== routeId));
+        })
+        .catch((error) => toast.error("Failed to delete route."));
   };
 
   return (

@@ -1,14 +1,10 @@
-const mockUsers = [
-  { username: "admin", password: "admin123", role: "ADMIN" },
-  { username: "user", password: "user123", role: "USER" },
-];
+import axios from "axios";
 
-export const login = (username, password) => {
-  const user = mockUsers.find(
-    (u) => u.username === username && u.password === password
-  );
-  if (!user) {
-    throw new Error("Invalid credentials");
-  }
-  return user.role;
+const USER_SERVICE_URL = "http://localhost:8089/api/auth";
+
+const AuthService = {
+  register: (user) => axios.post(`${USER_SERVICE_URL}/register`, user).then((res) => res.data),
+  login: (credentials) => axios.post(`${USER_SERVICE_URL}/login`, credentials).then((res) => res.data),
 };
+
+export default AuthService;

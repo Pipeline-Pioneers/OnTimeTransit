@@ -25,6 +25,20 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Add your dependencies here -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-crypto</artifactId>
+    <version>5.8.5</version> <!-- Use the appropriate version -->
+</dependency>
+
+<!-- Add your dependencies here -->
+<dependency>
+    <groupId>jakarta.validation</groupId>
+    <artifactId>jakarta.validation-api</artifactId>
+    <version>3.0.2</version>
+</dependency>
+
 			<!-- Spring Boot Starter for JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
