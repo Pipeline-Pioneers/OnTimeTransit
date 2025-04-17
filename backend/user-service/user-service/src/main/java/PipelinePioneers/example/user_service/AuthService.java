@@ -33,13 +33,24 @@ public class AuthService {
     }
 
     public String login(User user) {
+        System.out.println("Attempting login for username: " + user.getUsername());
+
+        // Check for admin credentials
+        if ("admin".equals(user.getUsername()) && "admin123".equals(user.getPassword())) {
+            System.out.println("Admin login successful");
+            return "ADMIN";
+        }
+
+        // Check for regular user credentials
         User existingUser = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
+            System.out.println("Invalid password for username: " + user.getUsername());
             throw new RuntimeException("Invalid credentials");
         }
 
-        return "Login successful!";
+        System.out.println("User login successful: " + user.getUsername());
+        return "USER";
     }
 }

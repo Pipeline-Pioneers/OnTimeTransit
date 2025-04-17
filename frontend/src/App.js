@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -18,7 +18,7 @@ import ManageTickets from "./components/Admin/ManageTickets";
 import NotFound from "./pages/NotFound";
 
 import { AuthProvider } from "./context/AuthContext";
-import PrivateRoute from "./components/PrivateRoute";
+import PrivateRoute from "./utils/PrivateRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 import './App.css';
@@ -44,7 +44,7 @@ function App() {
                 <Route
                   path="/admin"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute allowedRoles={["ADMIN"]}>
                       <AdminDashboard />
                     </PrivateRoute>
                   }
@@ -52,7 +52,7 @@ function App() {
                 <Route
                   path="/admin/schedules"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute allowedRoles={["ADMIN"]}>
                       <BusScheduleList />
                     </PrivateRoute>
                   }
@@ -60,7 +60,7 @@ function App() {
                 <Route
                   path="/admin/schedules/add"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute allowedRoles={["ADMIN"]}>
                       <AddBusSchedule />
                     </PrivateRoute>
                   }
@@ -68,7 +68,7 @@ function App() {
                 <Route
                   path="/admin/tickets"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute allowedRoles={["ADMIN"]}>
                       <ManageTickets />
                     </PrivateRoute>
                   }
@@ -76,7 +76,7 @@ function App() {
                 <Route
                   path="/admin/routes"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute allowedRoles={["ADMIN"]}>
                       <RouteList />
                     </PrivateRoute>
                   }
@@ -84,7 +84,7 @@ function App() {
                 <Route
                   path="/admin/routes/add"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute allowedRoles={["ADMIN"]}>
                       <AddRoute />
                     </PrivateRoute>
                   }
@@ -94,7 +94,7 @@ function App() {
                 <Route
                   path="/user"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute allowedRoles={["USER"]}>
                       <UserDashboard />
                     </PrivateRoute>
                   }
@@ -102,7 +102,7 @@ function App() {
                 <Route
                   path="/user/tickets"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute allowedRoles={["USER"]}>
                       <TicketList />
                     </PrivateRoute>
                   }
@@ -110,7 +110,7 @@ function App() {
                 <Route
                   path="/user/book-ticket"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute allowedRoles={["USER"]}>
                       <BookTicket />
                     </PrivateRoute>
                   }
@@ -118,7 +118,7 @@ function App() {
                 <Route
                   path="/user/routes"
                   element={
-                    <PrivateRoute>
+                    <PrivateRoute allowedRoles={["USER"]}>
                       <RouteList />
                     </PrivateRoute>
                   }
@@ -134,8 +134,8 @@ function App() {
                   }
                 />
 
-                {/* Catch-All Route */}
-                <Route path="*" element={<NotFound />} />
+                {/* Default Redirect */}
+                <Route path="*" element={<Navigate to="/" />} />
               </Routes>
             </ErrorBoundary>
           </div>

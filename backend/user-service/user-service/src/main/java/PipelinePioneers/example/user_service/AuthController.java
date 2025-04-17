@@ -2,14 +2,17 @@ package PipelinePioneers.example.user_service;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtUtil jwtUtil) {
         this.authService = authService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
@@ -23,12 +26,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<?> login(@RequestBody User user) {
         try {
-            String message = authService.login(user);
-            return ResponseEntity.ok(message);
+            String role = authService.login(user); // Determine the user's role
+            String token = jwtUtil.generateToken(user.getUsername(), role); // Generate JWT with role
+            return ResponseEntity.ok(Map.of("token", token, "role", role));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
     }
 }

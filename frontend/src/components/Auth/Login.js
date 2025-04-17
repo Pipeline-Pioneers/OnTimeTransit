@@ -18,9 +18,17 @@ function Login() {
     console.log("Credentials being sent to the backend:", credentials);
 
     AuthService.login(credentials)
-      .then(() => {
-        toast.success("Login successful!");
-        navigate("/user"); // Navigate to user dashboard
+      .then((role) => {
+        console.log("User role:", role);
+        if (role === "ADMIN") {
+          console.log("Navigating to admin dashboard...");
+          navigate("/admin");
+        } else if (role === "USER") {
+          console.log("Navigating to user dashboard...");
+          navigate("/user");
+        } else {
+          toast.error("Unexpected role received from the server.");
+        }
       })
       .catch((error) => {
         toast.error("Login failed. Please check your credentials.");

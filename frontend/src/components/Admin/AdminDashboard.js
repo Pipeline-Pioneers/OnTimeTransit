@@ -33,6 +33,8 @@ function AdminDashboard() {
   });
   const navigate = useNavigate();
 
+  console.log("AdminDashboard rendered");
+
   // Fetch data for analytics and management
   const fetchSummaryData = () => {
     ApiService.getRoutes().then(setRoutes);
