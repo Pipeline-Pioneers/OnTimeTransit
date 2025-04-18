@@ -31,14 +31,18 @@ function ManageRoutes() {
   }, []);
 
   // Handle adding a new route
-  const handleAddRoute = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(newRoute); // Log the route data to verify
     ApiService.addRoute(newRoute)
-        .then((route) => {
-            toast.success("Route added successfully!");
-            setRoutes((prevRoutes) => [...prevRoutes, route]);
-        })
-        .catch((error) => toast.error("Failed to add route."));
+      .then(() => {
+        toast.success("Route added successfully!");
+        setRoutes((prev) => [...prev, newRoute]); // Update the local state
+      })
+      .catch((error) => {
+        toast.error("Failed to add route. Please try again.");
+        console.error("Error adding route:", error);
+      });
   };
 
   // Handle deleting a route
@@ -56,7 +60,7 @@ function ManageRoutes() {
       <h1>Manage Routes</h1>
 
       {/* Add Route Form */}
-      <form onSubmit={handleAddRoute} className="mb-4">
+      <form onSubmit={handleSubmit} className="mb-4">
         <div className="mb-3">
           <TextField
             label="Start Point"

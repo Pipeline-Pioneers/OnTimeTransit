@@ -19,12 +19,20 @@ function RouteList() {
 
     // Set up WebSocket client
     const client = new Client({
-      brokerURL: "ws://localhost:8084/ws",
+      brokerURL: "ws://localhost:8084/ws", // Ensure this matches the backend WebSocket endpoint
+      connectHeaders: {}, // Optional: Add headers if needed
+      debug: (str) => console.log(str), // Enable debugging
+      reconnectDelay: 5000, // Reconnect after 5 seconds if disconnected
       onConnect: () => {
+        console.log("Connected to WebSocket");
         client.subscribe("/topic/routes", (message) => {
           const newRoute = JSON.parse(message.body);
           setRoutes((prevRoutes) => [...prevRoutes, newRoute]);
         });
+      },
+      onStompError: (frame) => {
+        console.error("Broker reported error: " + frame.headers["message"]);
+        console.error("Additional details: " + frame.body);
       },
     });
 

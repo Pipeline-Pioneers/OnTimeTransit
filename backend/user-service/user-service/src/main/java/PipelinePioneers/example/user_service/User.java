@@ -2,8 +2,8 @@ package PipelinePioneers.example.user_service;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "\"user\"") // Ensure this matches the table name in the database
+@Entity@Table(name = "\"user\"") // Ensure this matches the table name in the database
+
 public class User {
 
     @Id

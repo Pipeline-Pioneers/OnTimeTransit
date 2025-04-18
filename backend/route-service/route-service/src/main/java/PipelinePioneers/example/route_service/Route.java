@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "route")
 public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

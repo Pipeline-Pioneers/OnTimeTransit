@@ -14,7 +14,7 @@ const ApiService = {
     return response.data;
   },
   getRouteById: (id) => axios.get(`${ROUTE_SERVICE_URL}/${id}`).then((response) => response.data),
-  addRoute: (route) => axios.post(ROUTE_SERVICE_URL, route).then((response) => response.data),
+  addRoute: (route) => axios.post(`${ROUTE_SERVICE_URL}`, route).then((response) => response.data),
   updateRoute: (id, route) => axios.put(`${ROUTE_SERVICE_URL}/${id}`, route).then((res) => res.data),
   deleteRoute: async (id) => {
     const response = await axios.delete(`${ROUTE_SERVICE_URL}/${id}`);
@@ -25,6 +25,10 @@ const ApiService = {
   getSchedules: () => axios.get(`${SCHEDULE_SERVICE_URL}`).then((res) => res.data),
   addSchedule: (schedule) => axios.post(`${SCHEDULE_SERVICE_URL}`, schedule).then((res) => res.data),
   deleteSchedule: (id) => axios.delete(`${SCHEDULE_SERVICE_URL}/${id}`).then((res) => res.data),
+  getSchedulesByRoute: (routeId) =>
+    axios
+      .get(`${SCHEDULE_SERVICE_URL}/route/${routeId}`)
+      .then((res) => res.data),
 
   // Tickets
   getTickets: (routeName, travelDateTime) =>
@@ -33,8 +37,15 @@ const ApiService = {
         params: { routeName, travelDateTime },
       })
       .then((res) => res.data),
-  bookTicket: (ticket) => axios.post(`${TICKET_SERVICE_URL}`, ticket).then((res) => res.data),
+  bookTicket: (ticket) =>
+    axios.post(`${TICKET_SERVICE_URL}/book`, ticket).then((res) => res.data),
   cancelTicket: (id) => axios.delete(`${TICKET_SERVICE_URL}/${id}`).then((res) => res.data),
+  getAvailableSeats: (routeName, travelDateTime) =>
+    axios
+      .get(`${TICKET_SERVICE_URL}/available-seats`, {
+        params: { routeName, travelDateTime },
+      })
+      .then((res) => res.data),
 
   // Authentication
   login: (credentials) => axios.post(`${USER_SERVICE_URL}/login`, credentials).then((res) => res.data),

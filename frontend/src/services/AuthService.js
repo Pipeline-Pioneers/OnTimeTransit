@@ -12,6 +12,7 @@ const AuthService = {
         console.log("Login successful. Role:", role);
         localStorage.setItem("role", role); // Store the role in localStorage
         localStorage.setItem("token", token); // Store the token in localStorage
+        localStorage.setItem("isAuthenticated", true); // Mark the user as authenticated
         return role; // Return the role for further processing
       })
       .catch((error) => {
@@ -38,6 +39,8 @@ const AuthService = {
     console.log("Logging out...");
     localStorage.removeItem("role"); // Clear the role from localStorage
     localStorage.removeItem("token"); // Clear the token from localStorage
+    localStorage.removeItem("isAuthenticated"); // Clear authentication status
+    window.location.href = "/login"; // Redirect to the login page
   },
 
   getRole: () => localStorage.getItem("role"), // Retrieve the role from localStorage

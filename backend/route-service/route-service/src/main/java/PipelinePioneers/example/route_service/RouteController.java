@@ -1,5 +1,6 @@
 package PipelinePioneers.example.route_service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -18,12 +19,25 @@ public class RouteController {
     }
 
     @PostMapping
-    public Route createRoute(@RequestBody Route route) {
-        return routeService.saveRoute(route);
+    public ResponseEntity<Route> createRoute(@RequestBody Route route) {
+        System.out.println("Received route: " + route); // Debugging log
+        Route savedRoute = routeService.saveRoute(route);
+        return ResponseEntity.ok(savedRoute);
     }
 
     @DeleteMapping("/{id}")
     public void deleteRoute(@PathVariable Long id) {
         routeService.deleteRoute(id);
+    }
+
+    @PutMapping("/{id}")
+    public Route updateRoute(@PathVariable Long id, @RequestBody Route updatedRoute) {
+        Route existingRoute = routeService.getRouteById(id);
+        existingRoute.setStartPoint(updatedRoute.getStartPoint());
+        existingRoute.setEndPoint(updatedRoute.getEndPoint());
+        existingRoute.setIntermediateStops(updatedRoute.getIntermediateStops());
+        existingRoute.setDistance(updatedRoute.getDistance());
+        existingRoute.setEstimatedTravelTime(updatedRoute.getEstimatedTravelTime());
+        return routeService.saveRoute(existingRoute);
     }
 }

@@ -16,6 +16,7 @@ function BookTicket() {
       : "",
     travelDateTime: "",
     seatNumber: "",
+    price: 0,
   });
   const [routes, setRoutes] = useState([]);
   const [availableSeats, setAvailableSeats] = useState([]);
@@ -33,16 +34,12 @@ function BookTicket() {
 
   // Fetch available seats when a route is selected
   useEffect(() => {
-    if (ticket.routeName) {
-      ApiService.getTickets(ticket.routeName)
-        .then((data) => {
-          const bookedSeats = data.map((ticket) => ticket.seatNumber);
-          const allSeats = Array.from({ length: 50 }, (_, i) => i + 1); // Assuming 50 seats
-          setAvailableSeats(allSeats.filter((seat) => !bookedSeats.includes(seat)));
-        })
+    if (ticket.routeName && ticket.travelDateTime) {
+      ApiService.getAvailableSeats(ticket.routeName, ticket.travelDateTime)
+        .then((data) => setAvailableSeats(data))
         .catch((error) => toast.error("Failed to fetch seat availability."));
     }
-  }, [ticket.routeName]);
+  }, [ticket.routeName, ticket.travelDateTime]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -164,6 +161,18 @@ function BookTicket() {
               </option>
             ))}
           </select>
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Price</label>
+          <input
+            type="number"
+            className="form-control"
+            name="price"
+            value={ticket.price}
+            onChange={handleChange}
+            required
+            placeholder="Enter ticket price"
+          />
         </div>
         <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? "Booking..." : "Book Ticket"}
