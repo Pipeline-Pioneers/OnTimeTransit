@@ -32,10 +32,8 @@ public class TicketService {
 
     // Check seat availability
     public List<Integer> getAvailableSeats(String routeName, LocalDateTime travelDateTime) {
-        List<Ticket> bookedTickets = repository.findByRouteNameAndTravelDateTime(routeName, travelDateTime);
-        List<Integer> bookedSeats = bookedTickets.stream().map(Ticket::getSeatNumber).toList();
-        List<Integer> allSeats = IntStream.rangeClosed(1, 50).boxed().toList(); // Assuming 50 seats
-        return allSeats.stream().filter(seat -> !bookedSeats.contains(seat)).toList();
+        List<Integer> bookedSeats = repository.findBookedSeats(routeName, travelDateTime);
+        return IntStream.rangeClosed(1, 50).filter(seat -> !bookedSeats.contains(seat)).boxed().toList();
     }
 
     public void cancelTicket(Long ticketId) {

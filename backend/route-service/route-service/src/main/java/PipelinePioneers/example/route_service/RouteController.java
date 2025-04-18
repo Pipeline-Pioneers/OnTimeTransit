@@ -2,6 +2,7 @@ package PipelinePioneers.example.route_service;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 
 @RestController
@@ -13,7 +14,8 @@ public class RouteController {
         this.routeService = routeService;
     }
 
-    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/routes")
     public List<Route> getAllRoutes() {
         return routeService.getAllRoutes();
     }

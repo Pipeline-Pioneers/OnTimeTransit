@@ -12,9 +12,10 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import { useData } from "../../context/DataContext";
 
 function ManageRoutes() {
-  const [routes, setRoutes] = useState([]);
+  const { routes, setRoutes } = useData(); // Destructure both routes and setRoutes
   const [newRoute, setNewRoute] = useState({
     startPoint: "",
     endPoint: "",
