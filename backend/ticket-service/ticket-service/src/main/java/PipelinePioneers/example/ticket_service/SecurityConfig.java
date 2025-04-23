@@ -1,23 +1,17 @@
-package PipelinePioneers.example.route_service;
+package PipelinePioneers.example.ticket_service;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.http.HttpMethod;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
             .authorizeHttpRequests()
-            .requestMatchers(HttpMethod.DELETE, "/api/routes/**").permitAll() // Allow DELETE requests
-            .requestMatchers(HttpMethod.GET, "/api/routes").permitAll() // Allow GET requests
-            .requestMatchers(HttpMethod.POST, "/api/routes").permitAll() // Allow POST requests temporarily
+            .requestMatchers("/api/tickets/**").permitAll() // Allow all requests to /api/tickets
             .anyRequest().authenticated();
         return http.build();
     }

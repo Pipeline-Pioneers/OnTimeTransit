@@ -11,7 +11,7 @@ const ANALYTICS_SERVICE_URL = "http://localhost:8086/api/analytics";
 const token = localStorage.getItem("token"); // Retrieve token from localStorage
 const axiosInstance = axios.create({
   headers: {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${token}`, // Include the token in the header
   },
 });
 
@@ -32,15 +32,32 @@ const handleApiError = (error) => {
 
 const ApiService = {
   getRoutes: async () => {
-    const response = await axios.get("http://localhost:8084/api/routes");
-    return response.data;
+    try {
+      const response = await axios.get("http://localhost:8084/api/routes");
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch routes:", error);
+      throw new Error("Failed to fetch routes.");
+    }
   },
   getRouteById: (id) => axiosInstance.get(`${ROUTE_SERVICE_URL}/${id}`).then((response) => response.data).catch(handleApiError),
-  addRoute: (route) => axiosInstance.post(`${ROUTE_SERVICE_URL}`, route).then((response) => response.data).catch(handleApiError),
+  addRoute: async (route) => {
+    try {
+      const response = await axios.post("http://localhost:8084/api/routes", route);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to add route:", error);
+      throw new Error("Failed to add route. Please try again.");
+    }
+  },
   updateRoute: (id, route) => axiosInstance.put(`${ROUTE_SERVICE_URL}/${id}`, route).then((res) => res.data).catch(handleApiError),
   deleteRoute: async (id) => {
-    const response = await axiosInstance.delete(`${ROUTE_SERVICE_URL}/${id}`).catch(handleApiError);
-    return response.data;
+    try {
+      await axios.delete(`http://localhost:8084/api/routes/${id}`);
+    } catch (error) {
+      console.error("Failed to delete route:", error);
+      throw new Error("Failed to delete route. Please try again.");
+    }
   },
 
   // Schedules
@@ -63,7 +80,14 @@ const ApiService = {
       .catch(handleApiError),
   bookTicket: (ticket) =>
     axiosInstance.post(`${TICKET_SERVICE_URL}/book`, ticket).then((res) => res.data).catch(handleApiError),
-  cancelTicket: (id) => axiosInstance.delete(`${TICKET_SERVICE_URL}/${id}`).then((res) => res.data).catch(handleApiError),
+  cancelTicket: (id) =>
+    axiosInstance
+      .put(`${TICKET_SERVICE_URL}/cancel/${id}`)
+      .then((res) => res.data)
+      .catch((error) => {
+        console.error("API Error:", error);
+        throw error;
+      }),
   getAvailableSeats: (routeName, travelDateTime) =>
     axiosInstance
       .get(`${TICKET_SERVICE_URL}/available-seats`, {

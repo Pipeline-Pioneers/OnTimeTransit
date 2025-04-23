@@ -22,7 +22,7 @@ public class TicketService {
     // Book a ticket
     public Ticket bookTicket(Ticket ticket) {
         ticket.setStatus(TicketStatus.BOOKED); // Default status is BOOKED
-        return repository.save(ticket); // Save the ticket to the database
+        return repository.save(ticket);
     }
 
     // Fetch tickets by routeName and travelDateTime

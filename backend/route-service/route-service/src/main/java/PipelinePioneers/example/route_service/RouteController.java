@@ -1,5 +1,6 @@
 package PipelinePioneers.example.route_service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,8 +21,8 @@ public class RouteController {
 
     // Public endpoint to fetch all routes
     @GetMapping
-    public List<Route> getAllRoutes() {
-        return routeService.getAllRoutes();
+    public ResponseEntity<List<Route>> getAllRoutes() {
+        return ResponseEntity.ok(routeService.getAllRoutes());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -31,15 +32,16 @@ public class RouteController {
     }
 
     @PostMapping
-    public ResponseEntity<Route> createRoute(@RequestBody Route route) {
-        Route savedRoute = routeService.saveRoute(route);
-        messagingTemplate.convertAndSend("/topic/routes", savedRoute);
-        return ResponseEntity.ok(savedRoute);
+    public ResponseEntity<Route> addRoute(@RequestBody Route route) {
+        Route savedRoute = routeService.addRoute(route); // Ensure this calls the service
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoute);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public void deleteRoute(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRoute(@PathVariable Long id) {
         routeService.deleteRoute(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

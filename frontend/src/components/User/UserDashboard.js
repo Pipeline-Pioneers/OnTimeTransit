@@ -275,6 +275,12 @@ function UserDashboard() {
           </form>
         </div>
       )}
+      <button
+        className="btn btn-primary"
+        onClick={() => navigate("/user/book-ticket")}
+      >
+        Book a Ticket
+      </button>
     </div>
   );
 }
