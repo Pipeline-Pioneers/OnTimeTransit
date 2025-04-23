@@ -8,6 +8,13 @@ const USER_SERVICE_URL = "http://localhost:8089/api/auth";
 const NOTIFICATION_SERVICE_URL = "http://localhost:8085/api/notifications";
 const ANALYTICS_SERVICE_URL = "http://localhost:8086/api/analytics";
 
+const token = localStorage.getItem("token"); // Retrieve token from localStorage
+const axiosInstance = axios.create({
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+
 const handleApiError = (error) => {
   if (error.response) {
     // Server responded with a status other than 2xx
@@ -24,42 +31,41 @@ const handleApiError = (error) => {
 };
 
 const ApiService = {
-  // Routes
   getRoutes: async () => {
-    const response = await axios.get(ROUTE_SERVICE_URL).catch(handleApiError);
+    const response = await axios.get("http://localhost:8084/api/routes");
     return response.data;
   },
-  getRouteById: (id) => axios.get(`${ROUTE_SERVICE_URL}/${id}`).then((response) => response.data).catch(handleApiError),
-  addRoute: (route) => axios.post(`${ROUTE_SERVICE_URL}`, route).then((response) => response.data).catch(handleApiError),
-  updateRoute: (id, route) => axios.put(`${ROUTE_SERVICE_URL}/${id}`, route).then((res) => res.data).catch(handleApiError),
+  getRouteById: (id) => axiosInstance.get(`${ROUTE_SERVICE_URL}/${id}`).then((response) => response.data).catch(handleApiError),
+  addRoute: (route) => axiosInstance.post(`${ROUTE_SERVICE_URL}`, route).then((response) => response.data).catch(handleApiError),
+  updateRoute: (id, route) => axiosInstance.put(`${ROUTE_SERVICE_URL}/${id}`, route).then((res) => res.data).catch(handleApiError),
   deleteRoute: async (id) => {
-    const response = await axios.delete(`${ROUTE_SERVICE_URL}/${id}`).catch(handleApiError);
+    const response = await axiosInstance.delete(`${ROUTE_SERVICE_URL}/${id}`).catch(handleApiError);
     return response.data;
   },
 
   // Schedules
-  getSchedules: () => axios.get(`${SCHEDULE_SERVICE_URL}`).then((res) => res.data).catch(handleApiError),
-  addSchedule: (schedule) => axios.post(`${SCHEDULE_SERVICE_URL}`, schedule).then((res) => res.data).catch(handleApiError),
-  deleteSchedule: (id) => axios.delete(`${SCHEDULE_SERVICE_URL}/${id}`).then((res) => res.data).catch(handleApiError),
+  getSchedules: () => axiosInstance.get(`${SCHEDULE_SERVICE_URL}`).then((res) => res.data).catch(handleApiError),
+  addSchedule: (schedule) => axiosInstance.post(`${SCHEDULE_SERVICE_URL}`, schedule).then((res) => res.data).catch(handleApiError),
+  deleteSchedule: (id) => axiosInstance.delete(`${SCHEDULE_SERVICE_URL}/${id}`).then((res) => res.data).catch(handleApiError),
   getSchedulesByRoute: (routeId) =>
-    axios
+    axiosInstance
       .get(`${SCHEDULE_SERVICE_URL}/route/${routeId}`)
       .then((res) => res.data)
       .catch(handleApiError),
 
   // Tickets
   getTickets: (routeName, travelDateTime) =>
-    axios
+    axiosInstance
       .get(`${TICKET_SERVICE_URL}`, {
         params: { routeName, travelDateTime },
       })
       .then((res) => res.data)
       .catch(handleApiError),
   bookTicket: (ticket) =>
-    axios.post(`${TICKET_SERVICE_URL}/book`, ticket).then((res) => res.data).catch(handleApiError),
-  cancelTicket: (id) => axios.delete(`${TICKET_SERVICE_URL}/${id}`).then((res) => res.data).catch(handleApiError),
+    axiosInstance.post(`${TICKET_SERVICE_URL}/book`, ticket).then((res) => res.data).catch(handleApiError),
+  cancelTicket: (id) => axiosInstance.delete(`${TICKET_SERVICE_URL}/${id}`).then((res) => res.data).catch(handleApiError),
   getAvailableSeats: (routeName, travelDateTime) =>
-    axios
+    axiosInstance
       .get(`${TICKET_SERVICE_URL}/available-seats`, {
         params: { routeName, travelDateTime },
       })
@@ -67,16 +73,16 @@ const ApiService = {
       .catch(handleApiError),
 
   // Authentication
-  login: (credentials) => axios.post(`${USER_SERVICE_URL}/login`, credentials).then((res) => res.data).catch(handleApiError),
-  register: (user) => axios.post(`${USER_SERVICE_URL}/register`, user).then((res) => res.data).catch(handleApiError),
+  login: (credentials) => axiosInstance.post(`${USER_SERVICE_URL}/login`, credentials).then((res) => res.data).catch(handleApiError),
+  register: (user) => axiosInstance.post(`${USER_SERVICE_URL}/register`, user).then((res) => res.data).catch(handleApiError),
 
   // Notifications
   sendNotification: (message) =>
-    axios.post(`${NOTIFICATION_SERVICE_URL}/send`, { message }).then((res) => res.data).catch(handleApiError),
+    axiosInstance.post(`${NOTIFICATION_SERVICE_URL}/send`, { message }).then((res) => res.data).catch(handleApiError),
 
   // Analytics
   getAnalyticsSummary: () =>
-    axios.get(`${ANALYTICS_SERVICE_URL}/summary`).then((res) => res.data).catch(handleApiError),
+    axiosInstance.get(`${ANALYTICS_SERVICE_URL}/summary`).then((res) => res.data).catch(handleApiError),
 };
 
 export { ApiService };

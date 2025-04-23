@@ -9,7 +9,9 @@ export const DataProvider = ({ children }) => {
   const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
-    ApiService.getRoutes().then(setRoutes).catch(console.error);
+    ApiService.getRoutes()
+      .then(setRoutes)
+      .catch((error) => console.error("Failed to fetch routes:", error));
     ApiService.getSchedules().then(setSchedules).catch(console.error);
     ApiService.getTickets().then(setTickets).catch(console.error);
   }, []);

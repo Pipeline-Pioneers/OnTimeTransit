@@ -137,6 +137,9 @@ function App() {
                     }
                   />
 
+                  {/* Route List */}
+                  <Route path="/routes" element={<RouteList />} />
+
                   {/* Default Redirect */}
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
