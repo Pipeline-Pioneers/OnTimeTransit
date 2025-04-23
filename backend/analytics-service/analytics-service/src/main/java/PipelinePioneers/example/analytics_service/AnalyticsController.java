@@ -1,9 +1,9 @@
 // filepath: ManagementSystemBus/analytics-service/src/main/java/PipelinePioneers/example/analytics_service/AnalyticsController.java
 package PipelinePioneers.example.analytics_service;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/analytics")
@@ -15,8 +15,13 @@ public class AnalyticsController {
     }
 
     @GetMapping("/summary")
-    public AnalyticsSummary getSummary() {
-        return analyticsService.getSummary();
+    public Map<String, Object> getAnalyticsSummary() {
+        return Map.of(
+            "totalTickets", 120,
+            "totalRoutes", 15,
+            "totalSchedules", 10,
+            "revenue", 5000
+        );
     }
 
     @GetMapping("/test-db")

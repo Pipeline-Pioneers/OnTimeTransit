@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
-import { ApiService } from "../../services/ApiService";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import AuthService from "../../services/AuthService";
 
 function Register() {
   const [user, setUser] = useState({
     username: "",
     password: "",
+    email: "",
+    phoneNumber: "",
   });
   const navigate = useNavigate();
 
@@ -17,7 +19,10 @@ function Register() {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    ApiService.register(user)
+
+    console.log("User object being sent to the backend:", user);
+
+    AuthService.register(user)
       .then(() => {
         toast.success("Registration successful! Please log in.");
         navigate("/login");
@@ -54,7 +59,31 @@ function Register() {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Register</button>
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Phone Number</label>
+          <input
+            type="text"
+            className="form-control"
+            name="phoneNumber"
+            value={user.phoneNumber}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Register
+        </button>
       </form>
     </div>
   );

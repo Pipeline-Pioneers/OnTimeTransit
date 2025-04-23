@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BusScheduleRepository extends JpaRepository<BusSchedule, Long> {
-    List<BusSchedule> findByRouteName(String routeName); // Use routeName instead of routeId
-    // Find schedules by routeId
+public interface ScheduleRepository extends JpaRepository<BusSchedule, Long> {
     List<BusSchedule> findByRouteId(Long routeId);
 }

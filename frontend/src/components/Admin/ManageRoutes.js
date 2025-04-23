@@ -12,9 +12,10 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import { useData } from "../../context/DataContext";
 
 function ManageRoutes() {
-  const [routes, setRoutes] = useState([]);
+  const { routes, setRoutes } = useData(); // Destructure both routes and setRoutes
   const [newRoute, setNewRoute] = useState({
     startPoint: "",
     endPoint: "",
@@ -31,31 +32,28 @@ function ManageRoutes() {
   }, []);
 
   // Handle adding a new route
-  const handleAddRoute = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(newRoute); // Log the route data to verify
     ApiService.addRoute(newRoute)
-      .then((route) => {
+      .then(() => {
         toast.success("Route added successfully!");
-        setRoutes((prevRoutes) => [...prevRoutes, route]);
-        setNewRoute({
-          startPoint: "",
-          endPoint: "",
-          intermediateStops: "",
-          distance: "",
-          estimatedTravelTime: "",
-        });
+        setRoutes((prev) => [...prev, newRoute]); // Update the local state
       })
-      .catch((error) => toast.error("Failed to add route."));
+      .catch((error) => {
+        toast.error("Failed to add route. Please try again.");
+        console.error("Error adding route:", error);
+      });
   };
 
   // Handle deleting a route
   const handleDeleteRoute = (routeId) => {
     ApiService.deleteRoute(routeId)
-      .then(() => {
-        toast.success("Route deleted successfully!");
-        setRoutes((prevRoutes) => prevRoutes.filter((route) => route.id !== routeId));
-      })
-      .catch((error) => toast.error("Failed to delete route."));
+        .then(() => {
+            toast.success("Route deleted successfully!");
+            setRoutes((prevRoutes) => prevRoutes.filter((route) => route.id !== routeId));
+        })
+        .catch((error) => toast.error("Failed to delete route."));
   };
 
   return (
@@ -63,7 +61,7 @@ function ManageRoutes() {
       <h1>Manage Routes</h1>
 
       {/* Add Route Form */}
-      <form onSubmit={handleAddRoute} className="mb-4">
+      <form onSubmit={handleSubmit} className="mb-4">
         <div className="mb-3">
           <TextField
             label="Start Point"

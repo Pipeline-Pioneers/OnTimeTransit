@@ -44,17 +44,11 @@ function ManageTickets({ onAnalyticsUpdate }) {
 
   const cancelTicket = (id) => {
     ApiService.cancelTicket(id)
-      .then(() => {
-        toast.success("Ticket canceled successfully!");
-        setTickets((prev) => prev.filter((ticket) => ticket.id !== id));
-        setFilteredTickets((prev) => prev.filter((ticket) => ticket.id !== id));
-        if (onAnalyticsUpdate) {
-          onAnalyticsUpdate(
-            tickets.filter((ticket) => ticket.id !== id)
-          );
-        }
-      })
-      .catch((error) => console.error("Error canceling ticket:", error));
+        .then(() => {
+            toast.success("Ticket canceled successfully!");
+            setTickets((prev) => prev.filter((ticket) => ticket.id !== id));
+        })
+        .catch((error) => console.error("Error canceling ticket:", error));
   };
 
   const exportTickets = () => {

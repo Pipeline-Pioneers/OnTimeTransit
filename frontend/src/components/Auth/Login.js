@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import AuthService from "../../services/AuthService";
 
 function Login() {
-  const [credentials, setCredentials] = useState({ username: "", password: "", role: "USER" });
-  const { login } = useAuth();
+  const [credentials, setCredentials] = useState({ username: "", password: "" });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -13,12 +14,26 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (credentials.username && credentials.password) {
-      toast.success("Login successful!");
-      login(credentials.role);
-    } else {
-      toast.error("Please enter valid credentials.");
-    }
+
+    console.log("Credentials being sent to the backend:", credentials);
+
+    AuthService.login(credentials)
+      .then((role) => {
+        console.log("User role:", role);
+        if (role === "ADMIN") {
+          console.log("Navigating to admin dashboard...");
+          navigate("/admin");
+        } else if (role === "USER") {
+          console.log("Navigating to user dashboard...");
+          navigate("/user");
+        } else {
+          toast.error("Unexpected role received from the server.");
+        }
+      })
+      .catch((error) => {
+        toast.error("Login failed. Please check your credentials.");
+        console.error("Error logging in:", error);
+      });
   };
 
   return (
@@ -47,20 +62,9 @@ function Login() {
             required
           />
         </div>
-        <div className="mb-3">
-          <label className="form-label">Login As</label>
-          <select
-            className="form-control"
-            name="role"
-            value={credentials.role}
-            onChange={handleChange}
-            required
-          >
-            <option value="USER">User</option>
-            <option value="ADMIN">Admin</option>
-          </select>
-        </div>
-        <button type="submit" className="btn btn-primary">Login</button>
+        <button type="submit" className="btn btn-primary">
+          Login
+        </button>
       </form>
     </div>
   );
