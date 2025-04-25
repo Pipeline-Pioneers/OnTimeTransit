@@ -12,6 +12,9 @@ public class RouteService {
     public RouteService(RouteRepository routeRepository) {
         this.routeRepository = routeRepository;
     }
+    public Route addRoute(Route route) {
+        return routeRepository.save(route); // Ensure this saves the route
+    }
 
     public List<Route> getAllRoutes() {
         return routeRepository.findAll();

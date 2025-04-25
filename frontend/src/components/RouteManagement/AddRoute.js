@@ -12,7 +12,7 @@ function AddRoute() {
     ApiService.addRoute(data)
       .then(() => {
         toast.success("Route added successfully!");
-        navigate("/admin/routes");
+        navigate("/admin/routes"); // Redirect to the route list page
       })
       .catch((error) => {
         toast.error("Failed to add route. Please try again.");

@@ -21,7 +21,7 @@ public class Ticket {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "route_name", nullable = false)
+    @Column(name = "route_name", nullable = false) // Ensure this is not null
     private String routeName;
 
     @Column(name = "travel_date_time", nullable = false)

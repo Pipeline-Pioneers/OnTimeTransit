@@ -11,9 +11,7 @@ function BookTicket() {
     passengerName: "",
     email: "",
     phoneNumber: "",
-    routeName: preselectedRoute
-      ? `${preselectedRoute.startPoint} - ${preselectedRoute.endPoint}`
-      : "",
+    routeId: preselectedRoute ? preselectedRoute.id : "",
     travelDateTime: "",
     seatNumber: "",
     price: 0,
@@ -34,12 +32,12 @@ function BookTicket() {
 
   // Fetch available seats when a route is selected
   useEffect(() => {
-    if (ticket.routeName && ticket.travelDateTime) {
-      ApiService.getAvailableSeats(ticket.routeName, ticket.travelDateTime)
+    if (ticket.routeId && ticket.travelDateTime) {
+      ApiService.getAvailableSeats(ticket.routeId, ticket.travelDateTime)
         .then((data) => setAvailableSeats(data))
         .catch((error) => toast.error("Failed to fetch seat availability."));
     }
-  }, [ticket.routeName, ticket.travelDateTime]);
+  }, [ticket.routeId, ticket.travelDateTime]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,22 +47,17 @@ function BookTicket() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Client-side validation
-    if (!/^\S+@\S+\.\S+$/.test(ticket.email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-    if (!/^\d{10}$/.test(ticket.phoneNumber)) {
-      toast.error("Please enter a valid 10-digit phone number.");
-      return;
-    }
-    if (!availableSeats.includes(Number(ticket.seatNumber))) {
-      toast.error("Selected seat is not available.");
-      return;
-    }
+    const ticketData = {
+      passengerName: ticket.passengerName,
+      email: ticket.email,
+      phoneNumber: ticket.phoneNumber,
+      routeName: routes.find((route) => route.id === ticket.routeId)?.startPoint + " - " + routes.find((route) => route.id === ticket.routeId)?.endPoint,
+      travelDateTime: ticket.travelDateTime,
+      seatNumber: ticket.seatNumber,
+      price: ticket.price,
+    };
 
-    setLoading(true);
-    ApiService.bookTicket(ticket)
+    ApiService.bookTicket(ticketData)
       .then(() => {
         toast.success("Ticket booked successfully!");
         navigate("/user/tickets");
@@ -72,8 +65,7 @@ function BookTicket() {
       .catch((error) => {
         toast.error("Failed to book ticket. Please try again.");
         console.error("Error booking ticket:", error);
-      })
-      .finally(() => setLoading(false));
+      });
   };
 
   return (
@@ -118,17 +110,17 @@ function BookTicket() {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Route Name</label>
+          <label className="form-label">Route</label>
           <select
             className="form-control"
-            name="routeName"
-            value={ticket.routeName}
+            name="routeId"
+            value={ticket.routeId}
             onChange={handleChange}
             required
           >
             <option value="">Select a Route</option>
             {routes.map((route) => (
-              <option key={route.id} value={`${route.startPoint} - ${route.endPoint}`}>
+              <option key={route.id} value={route.id}>
                 {route.startPoint} - {route.endPoint}
               </option>
             ))}

@@ -1,5 +1,7 @@
 package PipelinePioneers.example.ticket_service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -16,8 +18,13 @@ public class TicketController {
 
     // Book a ticket
     @PostMapping("/book")
-    public Ticket bookTicket(@RequestBody Ticket ticket) {
-        return service.bookTicket(ticket); // Save the ticket to the database
+    public ResponseEntity<Ticket> bookTicket(@RequestBody Ticket ticket) {
+        if (ticket.getRouteName() == null || ticket.getRouteName().isEmpty()) {
+            throw new IllegalArgumentException("Route name is required");
+        }
+
+        Ticket bookedTicket = service.bookTicket(ticket);
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookedTicket);
     }
 
     // Fetch all tickets or filter by routeName and travelDateTime
@@ -33,8 +40,9 @@ public class TicketController {
 
     // Cancel a ticket
     @PutMapping("/cancel/{id}")
-    public void cancelTicket(@PathVariable Long id) {
+    public ResponseEntity<Void> cancelTicket(@PathVariable Long id) {
         service.cancelTicket(id);
+        return ResponseEntity.noContent().build();
     }
 
     // Get available seats

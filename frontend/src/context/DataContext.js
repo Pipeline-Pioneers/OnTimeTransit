@@ -1,26 +1,15 @@
-import React, { createContext, useState, useEffect } from "react";
-import { ApiService } from "../services/ApiService";
+import React, { createContext, useState, useContext } from "react";
 
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const [routes, setRoutes] = useState([]);
-  const [schedules, setSchedules] = useState([]);
-  const [tickets, setTickets] = useState([]);
-
-  useEffect(() => {
-    ApiService.getRoutes()
-      .then(setRoutes)
-      .catch((error) => console.error("Failed to fetch routes:", error));
-    ApiService.getSchedules().then(setSchedules).catch(console.error);
-    ApiService.getTickets().then(setTickets).catch(console.error);
-  }, []);
 
   return (
-    <DataContext.Provider value={{ routes, schedules, tickets }}>
+    <DataContext.Provider value={{ routes, setRoutes }}>
       {children}
     </DataContext.Provider>
   );
 };
 
-export const useData = () => React.useContext(DataContext);
+export const useData = () => useContext(DataContext);
