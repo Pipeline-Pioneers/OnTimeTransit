@@ -2,20 +2,25 @@ package PipelinePioneers.example.user_service;
 
 import jakarta.persistence.*;
 
-@Entity
+@Entity@Table(name = "\"user\"") // Ensure this matches the table name in the database
+
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate the ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "\"id\"")
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @ManyToOne // Many users can have one role
-    @JoinColumn(name = "role_id") // Foreign key column in the User table
-    private Role role;
+    private String phoneNumber;
 
     // Getters and Setters
     public Long getId() {
@@ -50,11 +55,11 @@ public class User {
         this.email = email;
     }
 
-    public Role getRole() {
-        return role;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

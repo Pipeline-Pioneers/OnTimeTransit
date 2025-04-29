@@ -1,36 +1,37 @@
 package PipelinePioneers.example.route_service;
 
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class RouteService {
-    private final RouteRepository repository;
 
-    public RouteService(RouteRepository repository) {
-        this.repository = repository;
+    private final RouteRepository routeRepository;
+
+    public RouteService(RouteRepository routeRepository) {
+        this.routeRepository = routeRepository;
+    }
+    public Route addRoute(Route route) {
+        return routeRepository.save(route); // Ensure this saves the route
     }
 
     public List<Route> getAllRoutes() {
-        return repository.findAll();
+        return routeRepository.findAll();
     }
 
     public Route saveRoute(Route route) {
-        return repository.save(route);
-    }
-
-    public Route updateRoute(Long id, Route updatedRoute) {
-        Route existingRoute = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Route not found"));
-        existingRoute.setStartPoint(updatedRoute.getStartPoint());
-        existingRoute.setEndPoint(updatedRoute.getEndPoint());
-        existingRoute.setIntermediateStops(updatedRoute.getIntermediateStops());
-        existingRoute.setDistance(updatedRoute.getDistance());
-        existingRoute.setEstimatedTravelTime(updatedRoute.getEstimatedTravelTime());
-        return repository.save(existingRoute);
+        System.out.println("Saving route: " + route); // Debugging log
+        return routeRepository.save(route);
     }
 
     public void deleteRoute(Long id) {
-        repository.deleteById(id);
+        routeRepository.deleteById(id);
+    }
+
+    public Route getRouteById(Long id) {
+        // Fetch a Route by ID or throw an exception if not found
+        return routeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Route not found with ID: " + id));
     }
 }

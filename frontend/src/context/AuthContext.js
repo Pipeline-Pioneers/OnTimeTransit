@@ -4,10 +4,13 @@ import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    () => JSON.parse(localStorage.getItem("isAuthenticated")) || false
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const storedAuth = localStorage.getItem("isAuthenticated");
+    return storedAuth ? JSON.parse(storedAuth) : false;
+  });
+
   const [role, setRole] = useState(() => localStorage.getItem("role") || null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   }, [isAuthenticated, role]);
 
   const login = (userRole) => {
+    console.log("Logging in with role:", userRole);
     setIsAuthenticated(true);
     setRole(userRole);
     navigate(userRole === "ADMIN" ? "/admin" : "/user");

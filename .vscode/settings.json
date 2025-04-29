@@ -1,4 +1,46 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "route-service",
+            "name": "route-service",
+            "username": "luk",
+            "password": "SkorpionEVO47!"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "user-service",
+            "database": "user-service",
+            "username": "luk",
+            "password": "SkorpionEVO47!"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "ticket-service",
+            "database": "ticket-service",
+            "username": "luk",
+            "password": "SkorpionEVO47!"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "schedule-service",
+            "database": "schedule-service",
+            "username": "luk",
+            "password": "SkorpionEVO47!"
+        }
+    ]
 }
