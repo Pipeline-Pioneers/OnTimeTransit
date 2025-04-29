@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
 
-const PrivateRoute = ({ children, allowedRoles }) => {
+const PrivateRoute = ({ children, allowedRoles = [] }) => {
   const role = AuthService.getRole(); // Get the role from localStorage
 
   if (!role) {
@@ -19,3 +19,6 @@ const PrivateRoute = ({ children, allowedRoles }) => {
 };
 
 export default PrivateRoute;
+
+
+
