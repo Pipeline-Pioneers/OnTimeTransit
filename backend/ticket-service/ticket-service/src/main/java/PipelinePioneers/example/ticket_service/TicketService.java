@@ -41,4 +41,9 @@ public class TicketService {
         ticket.setStatus(TicketStatus.CANCELLED);
         repository.save(ticket);
     }
+
+    public void deleteTicket(Long id) {
+        repository.deleteById(id);
+    }
+    
 }

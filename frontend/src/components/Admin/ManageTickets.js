@@ -46,11 +46,37 @@ function ManageTickets({ onAnalyticsUpdate }) {
     ApiService.cancelTicket(id)
       .then(() => {
         toast.success("Ticket canceled successfully!");
-        setTickets((prev) => prev.filter((ticket) => ticket.id !== id));
+        // Update the ticket status in the local state instead of removing it
+        setTickets((prev) => 
+          prev.map((ticket) => 
+            ticket.id === id ? { ...ticket, status: "Canceled" } : ticket
+          )
+        );
+        setFilteredTickets((prev) => 
+          prev.map((ticket) => 
+            ticket.id === id ? { ...ticket, status: "Canceled" } : ticket
+          )
+        );
       })
       .catch((error) => {
         toast.error("Failed to cancel ticket.");
         console.error("Error canceling ticket:", error);
+      });
+  };
+
+  const deleteTicket = (id) => {
+    // Add this method to ApiService.js
+    // This is a placeholder - you'll need to implement the actual API call
+    ApiService.deleteTicket(id)
+      .then(() => {
+        toast.success("Ticket deleted successfully!");
+        // Remove the ticket from the local state
+        setTickets((prev) => prev.filter((ticket) => ticket.id !== id));
+        setFilteredTickets((prev) => prev.filter((ticket) => ticket.id !== id));
+      })
+      .catch((error) => {
+        toast.error("Failed to delete ticket.");
+        console.error("Error deleting ticket:", error);
       });
   };
 
@@ -135,12 +161,19 @@ function ManageTickets({ onAnalyticsUpdate }) {
               <td>{ticket.seatNumber}</td>
               <td>{ticket.status}</td>
               <td>
-                {ticket.status !== "Canceled" && (
+                {ticket.status !== "Canceled" ? (
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={() => cancelTicket(ticket.id)}
                   >
                     Cancel
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-dark btn-sm"
+                    onClick={() => deleteTicket(ticket.id)}
+                  >
+                    Delete
                   </button>
                 )}
               </td>

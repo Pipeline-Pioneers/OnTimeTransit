@@ -60,6 +60,17 @@ const ApiService = {
     }
   },
 
+  deleteTicket: async (id) => {
+    try {
+      const response = await axios.delete(`${TICKET_SERVICE_URL}/${id}`);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+      throw error; // Re-throw to allow component-level handling
+    }
+  },
+  
+
   // Schedules
   getSchedules: () => axiosInstance.get(`${SCHEDULE_SERVICE_URL}`).then((res) => res.data).catch(handleApiError),
   addSchedule: (schedule) => axiosInstance.post(`${SCHEDULE_SERVICE_URL}`, schedule).then((res) => res.data).catch(handleApiError),
