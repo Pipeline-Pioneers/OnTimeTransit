@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import AuthService from "../services/AuthService";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
-import { useAuth } from "../context/AuthContext";
 
-function Navbar({ role }) {
-  const { logout } = useAuth();
+function Navbar() {
+  const role = AuthService.getRole(); // Get the role from localStorage
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#343a40" }}>
@@ -20,12 +20,6 @@ function Navbar({ role }) {
             <Button color="inherit" component={Link} to="/admin/routes">
               Manage Routes
             </Button>
-            <Button color="inherit" component={Link} to="/admin/schedules">
-              Manage Schedules
-            </Button>
-            <Button color="inherit" component={Link} to="/admin/tickets">
-              Manage Tickets
-            </Button>
           </>
         ) : (
           <>
@@ -35,15 +29,9 @@ function Navbar({ role }) {
             <Button color="inherit" component={Link} to="/user/routes">
               View Routes
             </Button>
-            <Button color="inherit" component={Link} to="/user/book-ticket">
-              Book Ticket
-            </Button>
-            <Button color="inherit" component={Link} to="/user/tickets">
-              My Tickets
-            </Button>
           </>
         )}
-        <Button color="inherit" onClick={logout}>
+        <Button color="inherit" onClick={AuthService.logout}>
           Logout
         </Button>
       </Toolbar>

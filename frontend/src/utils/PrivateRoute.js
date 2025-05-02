@@ -1,10 +1,24 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import AuthService from "../services/AuthService";
 
-const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/" />;
+const PrivateRoute = ({ children, allowedRoles = [] }) => {
+  const role = AuthService.getRole(); // Get the role from localStorage
+
+  if (!role) {
+    // If no role is found, redirect to login
+    return <Navigate to="/login" />;
+  }
+
+  if (!allowedRoles.includes(role)) {
+    // If the user's role is not allowed, redirect to the landing page
+    return <Navigate to="/" />;
+  }
+
+  return children; // Render the protected component
 };
 
 export default PrivateRoute;
+
+
+

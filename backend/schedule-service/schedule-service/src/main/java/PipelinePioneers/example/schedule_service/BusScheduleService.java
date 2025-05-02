@@ -22,4 +22,10 @@ public class BusScheduleService {
     public void deleteSchedule(Long id) {
         repository.deleteById(id);
     }
+
+    public BusSchedule getScheduleById(Long id) {
+        // Fetch a BusSchedule by ID or throw an exception if not found
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Schedule not found with ID: " + id));
+    }
 }

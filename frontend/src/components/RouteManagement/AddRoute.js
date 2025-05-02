@@ -1,26 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ApiService } from "../../services/ApiService";
+import { useForm } from "react-hook-form";
 
 function AddRoute() {
-  const [route, setRoute] = useState({
-    startPoint: "",
-    endPoint: "",
-    intermediateStops: "",
-    distance: "",
-    estimatedTravelTime: "",
-  });
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setRoute({ ...route, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    ApiService.addRoute(route)
+  const onSubmit = (data) => {
+    ApiService.addRoute(data)
       .then(() => {
         toast.success("Route added successfully!");
         navigate("/admin/routes"); // Redirect to the route list page
@@ -34,60 +23,51 @@ function AddRoute() {
   return (
     <div className="container mt-5">
       <h2>Add Route</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-3">
           <label className="form-label">Start Point</label>
           <input
             type="text"
             className="form-control"
-            name="startPoint"
-            value={route.startPoint}
-            onChange={handleChange}
-            required
+            {...register("startPoint", { required: "Start Point is required" })}
           />
+          {errors.startPoint && <p className="text-danger">{errors.startPoint.message}</p>}
         </div>
         <div className="mb-3">
           <label className="form-label">End Point</label>
           <input
             type="text"
             className="form-control"
-            name="endPoint"
-            value={route.endPoint}
-            onChange={handleChange}
-            required
+            {...register("endPoint", { required: "End Point is required" })}
           />
+          {errors.endPoint && <p className="text-danger">{errors.endPoint.message}</p>}
         </div>
         <div className="mb-3">
           <label className="form-label">Intermediate Stops</label>
           <input
             type="text"
             className="form-control"
-            name="intermediateStops"
-            value={route.intermediateStops}
-            onChange={handleChange}
+            {...register("intermediateStops")}
           />
         </div>
         <div className="mb-3">
           <label className="form-label">Distance (km)</label>
           <input
             type="number"
+            step="0.01"
             className="form-control"
-            name="distance"
-            value={route.distance}
-            onChange={handleChange}
-            required
+            {...register("distance", { required: "Distance is required" })}
           />
+          {errors.distance && <p className="text-danger">{errors.distance.message}</p>}
         </div>
         <div className="mb-3">
           <label className="form-label">Estimated Travel Time</label>
           <input
             type="text"
             className="form-control"
-            name="estimatedTravelTime"
-            value={route.estimatedTravelTime}
-            onChange={handleChange}
-            required
+            {...register("estimatedTravelTime", { required: "Estimated Travel Time is required" })}
           />
+          {errors.estimatedTravelTime && <p className="text-danger">{errors.estimatedTravelTime.message}</p>}
         </div>
         <button type="submit" className="btn btn-primary">
           Add Route

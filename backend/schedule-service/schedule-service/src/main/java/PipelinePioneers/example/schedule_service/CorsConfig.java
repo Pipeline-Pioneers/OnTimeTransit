@@ -1,5 +1,4 @@
 package PipelinePioneers.example.schedule_service;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,8 +11,14 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+                registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // allow all important methods
+                .allowedHeaders("*") // allow all headers
+                .allowCredentials(true); // optional if you send cookies/session info
             }
         };
     }
 }
+
+

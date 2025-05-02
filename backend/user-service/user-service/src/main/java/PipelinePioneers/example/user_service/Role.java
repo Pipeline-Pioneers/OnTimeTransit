@@ -1,16 +1,16 @@
 package PipelinePioneers.example.user_service;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
-@Data
 @Entity
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // e.g., "ADMIN", "USER"
+    @Column(nullable = false, unique = true)
+    private String name;
 
     // Getters and Setters
     public Long getId() {

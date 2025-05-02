@@ -12,9 +12,10 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import { useData } from "../../context/DataContext";
 
 function ManageRoutes() {
-  const [routes, setRoutes] = useState([]);
+  const { routes, setRoutes } = useData(); // Destructure both routes and setRoutes
   const [newRoute, setNewRoute] = useState({
     startPoint: "",
     endPoint: "",
@@ -22,48 +23,64 @@ function ManageRoutes() {
     distance: "",
     estimatedTravelTime: "",
   });
+  const [error, setError] = useState(null);
 
   // Fetch routes on component mount
   useEffect(() => {
-    ApiService.getRoutes()
-      .then((data) => setRoutes(data))
-      .catch((error) => toast.error("Failed to fetch routes."));
+    fetchRoutes();
   }, []);
 
+  const fetchRoutes = async () => {
+    try {
+      const data = await ApiService.getRoutes();
+      setRoutes(data); // Ensure this updates the state
+    } catch (err) {
+      setError(err.message);
+      toast.error("Failed to fetch routes.");
+    }
+  };
+
   // Handle adding a new route
-  const handleAddRoute = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    ApiService.addRoute(newRoute)
-      .then((route) => {
-        toast.success("Route added successfully!");
-        setRoutes((prevRoutes) => [...prevRoutes, route]);
-        setNewRoute({
-          startPoint: "",
-          endPoint: "",
-          intermediateStops: "",
-          distance: "",
-          estimatedTravelTime: "",
-        });
-      })
-      .catch((error) => toast.error("Failed to add route."));
+    console.log(newRoute); // Log the route data to verify
+    try {
+      await ApiService.addRoute(newRoute); // Add the new route
+      toast.success("Route added successfully!");
+      await fetchRoutes(); // Refresh the list of routes after adding
+      setNewRoute({
+        startPoint: "",
+        endPoint: "",
+        intermediateStops: "",
+        distance: "",
+        estimatedTravelTime: "",
+      }); // Reset the form fields
+    } catch (err) {
+      setError(err.message);
+      toast.error("Failed to add route. Please try again.");
+      console.error("Error adding route:", err);
+    }
   };
 
   // Handle deleting a route
-  const handleDeleteRoute = (routeId) => {
-    ApiService.deleteRoute(routeId)
-      .then(() => {
-        toast.success("Route deleted successfully!");
-        setRoutes((prevRoutes) => prevRoutes.filter((route) => route.id !== routeId));
-      })
-      .catch((error) => toast.error("Failed to delete route."));
+  const handleDeleteRoute = async (routeId) => {
+    try {
+      await ApiService.deleteRoute(routeId);
+      toast.success("Route deleted successfully!");
+      setRoutes((prevRoutes) => prevRoutes.filter((route) => route.id !== routeId)); // Optimistic update
+    } catch (err) {
+      setError(err.message);
+      toast.error("Failed to delete route.");
+    }
   };
 
   return (
     <div className="container mt-5">
       <h1>Manage Routes</h1>
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
       {/* Add Route Form */}
-      <form onSubmit={handleAddRoute} className="mb-4">
+      <form onSubmit={handleSubmit} className="mb-4">
         <div className="mb-3">
           <TextField
             label="Start Point"
