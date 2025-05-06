@@ -9,7 +9,7 @@ import Register from "./components/Auth/Register";
 import AdminDashboard from "./components/Admin/AdminDashboard";
 import UserDashboard from "./components/User/UserDashboard";
 import BusScheduleList from "./components/BusSchedule/BusScheduleList";
-import AddBusSchedule from "./components/BusSchedule/AddBusSchedule";
+import AddSchedule from "./components/BusSchedule/AddBusSchedule"; 
 import TicketList from "./components/TicketBooking/TicketList";
 import BookTicket from "./components/TicketBooking/BookTicket";
 import RouteList from "./components/RouteManagement/RouteList";
@@ -67,7 +67,7 @@ function App() {
                     path="/admin/schedules/add"
                     element={
                       <PrivateRoute allowedRoles={["ADMIN"]}>
-                        <AddBusSchedule />
+                        <AddSchedule />
                       </PrivateRoute>
                     }
                   />
@@ -154,15 +154,9 @@ function App() {
                     }
                   />
 
-                  {/* Additional Route */}
-                  <Route
-                    path="/schedules/add"
-                    element={
-                      <PrivateRoute>
-                        <AddBusSchedule />
-                      </PrivateRoute>
-                    }
-                  />
+                  {/* Additional Routes */}
+                  <Route path="/schedules" element={<BusScheduleList />} />
+                  <Route path="/schedules/add" element={<AddSchedule />} />
 
                   {/* Route List */}
                   <Route path="/routes" element={<RouteList />} />
