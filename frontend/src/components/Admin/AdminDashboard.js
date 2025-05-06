@@ -107,6 +107,17 @@ function AdminDashboard() {
           <Button variant="contained" color="secondary" className="ms-3" onClick={() => navigate("/admin/schedules/add")}>
             Add Schedule
           </Button>
+          <Button variant="contained" color="success" className="ms-3" onClick={() => navigate("/admin/schedules/assign")}>
+            Assign Schedule
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            className="ms-3"
+            onClick={() => navigate("/admin/schedules/assign-existing")}
+          >
+            Assign Existing Schedule
+          </Button>
         </div>
 
         {/* Send Notifications Section */}
