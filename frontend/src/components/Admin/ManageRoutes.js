@@ -80,63 +80,7 @@ function ManageRoutes() {
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {/* Add Route Form */}
-      <form onSubmit={handleSubmit} className="mb-4">
-        <div className="mb-3">
-          <TextField
-            label="Start Point"
-            variant="outlined"
-            fullWidth
-            value={newRoute.startPoint}
-            onChange={(e) => setNewRoute({ ...newRoute, startPoint: e.target.value })}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <TextField
-            label="End Point"
-            variant="outlined"
-            fullWidth
-            value={newRoute.endPoint}
-            onChange={(e) => setNewRoute({ ...newRoute, endPoint: e.target.value })}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <TextField
-            label="Intermediate Stops"
-            variant="outlined"
-            fullWidth
-            value={newRoute.intermediateStops}
-            onChange={(e) => setNewRoute({ ...newRoute, intermediateStops: e.target.value })}
-          />
-        </div>
-        <div className="mb-3">
-          <TextField
-            label="Distance (km)"
-            variant="outlined"
-            fullWidth
-            type="number"
-            value={newRoute.distance}
-            onChange={(e) => setNewRoute({ ...newRoute, distance: e.target.value })}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <TextField
-            label="Estimated Travel Time"
-            variant="outlined"
-            fullWidth
-            value={newRoute.estimatedTravelTime}
-            onChange={(e) =>
-              setNewRoute({ ...newRoute, estimatedTravelTime: e.target.value })
-            }
-            required
-          />
-        </div>
-        <Button type="submit" variant="contained" color="primary">
-          Add Route
-        </Button>
-      </form>
+  
 
       {/* Routes Table */}
       <TableContainer component={Paper}>
