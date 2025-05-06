@@ -20,7 +20,10 @@ function BusScheduleList() {
   return (
     <div className="container mt-5">
       <h1>Bus Schedules</h1>
-      <Link to="/schedules/add" className="btn btn-primary mb-3">Add Schedule</Link>
+      {/* Add Schedule Button */}
+      <Link to="/schedules/add" className="btn btn-primary mb-3">
+        Add Schedule
+      </Link>
       <table className="table">
         <thead>
           <tr>
@@ -39,7 +42,12 @@ function BusScheduleList() {
               <td>{schedule.arrivalTime}</td>
               <td>{schedule.frequency}</td>
               <td>
-                <button className="btn btn-danger" onClick={() => deleteSchedule(schedule.id)}>Delete</button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => deleteSchedule(schedule.id)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
