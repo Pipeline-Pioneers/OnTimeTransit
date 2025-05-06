@@ -53,6 +53,20 @@ function UserDashboard() {
     }
   }, [selectedSchedule]);
 
+  // Monitor changes in localStorage and update schedules dynamically
+  useEffect(() => {
+    const handleStorageChange = () => {
+      if (selectedRoute) {
+        const assignedSchedules = JSON.parse(localStorage.getItem("assignedSchedules")) || {};
+        const routeSchedules = assignedSchedules[selectedRoute.id] || [];
+        setSchedules(routeSchedules);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [selectedRoute]);
+
   const handleBookTicket = (schedule) => {
     setSelectedSchedule(schedule);
     setShowBookingForm(true);
@@ -118,6 +132,54 @@ function UserDashboard() {
       .finally(() => setLoading(false));
   };
 
+  // Simulate schedule updates for the selected route
+  const simulateScheduleUpdate = () => {
+    if (selectedRoute) {
+      const simulatedSchedule = {
+        id: 999, // Temporary ID for the simulated schedule
+        departureTime: "14:27:00",
+        arrivalTime: "13:27:00",
+        frequency: "Weekly",
+      };
+
+      // Check if the schedule already exists in the state
+      const scheduleExists = schedules.some(
+        (schedule) =>
+          schedule.departureTime === simulatedSchedule.departureTime &&
+          schedule.arrivalTime === simulatedSchedule.arrivalTime &&
+          schedule.frequency === simulatedSchedule.frequency
+      );
+
+      if (!scheduleExists) {
+        setSchedules((prevSchedules) => [...prevSchedules, simulatedSchedule]);
+        toast.success("Simulated schedule update applied.");
+      }
+    }
+  };
+
+  // Fetch schedules for the selected route
+  const fetchSchedulesForRoute = (route) => {
+    const assignedSchedules = JSON.parse(localStorage.getItem("assignedSchedules")) || {};
+    let routeSchedules = assignedSchedules[route.id] || [];
+
+    // Simulate a schedule if no schedules are found
+    if (routeSchedules.length === 0) {
+      routeSchedules = [
+        {
+          id: 999, // Temporary ID for the simulated schedule
+          departureTime: "14:27:00",
+          arrivalTime: "13:27:00",
+          frequency: "Weekly",
+        },
+      ];
+      toast.info("No schedules found. Displaying a simulated schedule.");
+    }
+
+    // Update the state immediately
+    setSelectedRoute(route);
+    setSchedules(routeSchedules);
+  };
+
   return (
     <div className="container mt-5">
       <Navbar />
@@ -146,7 +208,7 @@ function UserDashboard() {
                 <td>
                   <button
                     className="btn btn-primary"
-                    onClick={() => setSelectedRoute(route)}
+                    onClick={() => fetchSchedulesForRoute(route)}
                   >
                     View Schedules
                   </button>
@@ -172,29 +234,20 @@ function UserDashboard() {
                 <th>Departure Time</th>
                 <th>Arrival Time</th>
                 <th>Frequency</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {schedules.length > 0 ? (
-                schedules.map((schedule) => (
-                  <tr key={schedule.id}>
+                schedules.map((schedule, index) => (
+                  <tr key={index}>
                     <td>{schedule.departureTime}</td>
                     <td>{schedule.arrivalTime}</td>
                     <td>{schedule.frequency}</td>
-                    <td>
-                      <button
-                        className="btn btn-success"
-                        onClick={() => handleBookTicket(schedule)}
-                      >
-                        Book Ticket
-                      </button>
-                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} align="center">
+                  <td colSpan={3} align="center">
                     No schedules available for this route.
                   </td>
                 </tr>
