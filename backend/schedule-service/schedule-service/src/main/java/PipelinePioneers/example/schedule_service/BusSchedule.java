@@ -12,8 +12,7 @@ public class BusSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long routeId; // Add this field to reference the Route entity
-
+    private Long routeId; // Reference to the Route entity
     private String routeName;
     private LocalTime departureTime;
     private LocalTime arrivalTime;
