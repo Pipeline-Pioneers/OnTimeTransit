@@ -59,17 +59,16 @@ const ApiService = {
       throw new Error("Failed to delete route. Please try again.");
     }
   },
-
-  deleteTicket: async (id) => {
-    try {
-      const response = await axios.delete(`${TICKET_SERVICE_URL}/${id}`);
-      return response.data;
-    } catch (error) {
-      handleApiError(error);
-      throw error; // Re-throw to allow component-level handling
-    }
-  },
-  
+    // Re-throw to allow proper handling in the component
+    deleteTicket: async (id) => {
+        try {
+            const response = await axiosInstance.delete(`${TICKET_SERVICE_URL}/${id}`);
+            return response.data;
+        } catch (error) {
+            handleApiError(error);
+            throw error; 
+        }
+    },
 
   // Schedules
   getSchedules: () => axiosInstance.get(`${SCHEDULE_SERVICE_URL}`).then((res) => res.data).catch(handleApiError),
