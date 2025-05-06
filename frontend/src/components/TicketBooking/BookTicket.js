@@ -12,6 +12,7 @@ function BookTicket() {
     email: "",
     phoneNumber: "",
     routeId: preselectedRoute ? preselectedRoute.id : "",
+    routeName: preselectedRoute ? `${preselectedRoute.startPoint} - ${preselectedRoute.endPoint}` : "",
     travelDateTime: "",
     seatNumber: "",
     price: 0,
@@ -33,15 +34,27 @@ function BookTicket() {
   // Fetch available seats when a route is selected
   useEffect(() => {
     if (ticket.routeId && ticket.travelDateTime) {
-      ApiService.getAvailableSeats(ticket.routeId, ticket.travelDateTime)
+      ApiService.getAvailableSeats(ticket.routeName, ticket.travelDateTime)
         .then((data) => setAvailableSeats(data))
         .catch((error) => toast.error("Failed to fetch seat availability."));
     }
   }, [ticket.routeId, ticket.travelDateTime]);
 
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTicket({ ...ticket, [name]: value });
+
+    // Update routeName when routeId changes
+    if (name === "routeId") {
+      const selectedRoute = routes.find((route) => route.id === Number(value));
+      if (selectedRoute) {
+        setTicket((prev) => ({
+          ...prev,
+          routeName: `${selectedRoute.startPoint} - ${selectedRoute.endPoint}`,
+        }));
+      }
+    }
   };
 
   const handleSubmit = (e) => {
@@ -51,7 +64,7 @@ function BookTicket() {
       passengerName: ticket.passengerName,
       email: ticket.email,
       phoneNumber: ticket.phoneNumber,
-      routeName: routes.find((route) => route.id === ticket.routeId)?.startPoint + " - " + routes.find((route) => route.id === ticket.routeId)?.endPoint,
+      routeName: ticket.routeName, // Ensure routeName is included
       travelDateTime: ticket.travelDateTime,
       seatNumber: ticket.seatNumber,
       price: ticket.price,
@@ -71,7 +84,11 @@ function BookTicket() {
   return (
     <div className="container mt-5">
       <h2>Book Ticket</h2>
-      {loading && <div className="spinner-border text-primary" role="status"><span className="visually-hidden">Loading...</span></div>}
+      {loading && (
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Passenger Name</label>
