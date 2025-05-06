@@ -17,6 +17,9 @@ import AddRoute from "./components/RouteManagement/AddRoute";
 import ManageTickets from "./components/Admin/ManageTickets";
 import ManageRoutes from "./components/Admin/ManageRoutes";
 import NotFound from "./pages/NotFound";
+import ViewSchedules from "./components/User/ViewSchedules";
+import AssignSchedule from "./components/BusSchedule/AssignSchedule";
+import AssignExistingSchedule from "./components/BusSchedule/AssignExistingSchedule";
 
 import { AuthProvider } from "./context/AuthContext";
 import { DataProvider } from "./context/DataContext";
@@ -92,6 +95,22 @@ function App() {
                       </PrivateRoute>
                     }
                   />
+                  <Route
+                    path="/admin/schedules/assign"
+                    element={
+                      <PrivateRoute allowedRoles={["ADMIN"]}>
+                        <AssignSchedule />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/admin/schedules/assign-existing"
+                    element={
+                      <PrivateRoute allowedRoles={["ADMIN"]}>
+                        <AssignExistingSchedule />
+                      </PrivateRoute>
+                    }
+                  />
 
                   {/* User Dashboard Routes */}
                   <Route
@@ -123,6 +142,14 @@ function App() {
                     element={
                       <PrivateRoute allowedRoles={["USER"]}>
                         <RouteList />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/user/routes/:routeId/schedules"
+                    element={
+                      <PrivateRoute allowedRoles={["USER"]}>
+                        <ViewSchedules />
                       </PrivateRoute>
                     }
                   />

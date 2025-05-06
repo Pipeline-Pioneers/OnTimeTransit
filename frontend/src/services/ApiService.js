@@ -69,6 +69,11 @@ const ApiService = {
       .get(`${SCHEDULE_SERVICE_URL}/route/${routeId}`)
       .then((res) => res.data)
       .catch(handleApiError),
+  assignScheduleToRoute: (scheduleId, routeId) =>
+    axiosInstance
+      .put(`${SCHEDULE_SERVICE_URL}/${scheduleId}/assign-route/${routeId}`)
+      .then((res) => res.data)
+      .catch(handleApiError),
 
   // Tickets
   getTickets: (routeName, travelDateTime) =>
