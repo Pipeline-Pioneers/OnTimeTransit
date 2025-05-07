@@ -52,4 +52,11 @@ public class TicketController {
             @RequestParam String travelDateTime) {
         return service.getAvailableSeats(routeName, LocalDateTime.parse(travelDateTime));
     }
+
+    @DeleteMapping("/{id}")
+public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
+    service.deleteTicket(id);
+    return ResponseEntity.noContent().build();
+}
+
 }
