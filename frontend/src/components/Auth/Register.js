@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AuthService from "../../services/AuthService";
-
+ 
 function Register() {
   const [user, setUser] = useState({
     username: "",
@@ -11,17 +11,17 @@ function Register() {
     phoneNumber: "",
   });
   const navigate = useNavigate();
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
   };
-
+ 
   const handleRegister = (e) => {
     e.preventDefault();
-
+ 
     console.log("User object being sent to the backend:", user);
-
+ 
     AuthService.register(user)
       .then(() => {
         toast.success("Registration successful! Please log in.");
@@ -32,7 +32,7 @@ function Register() {
         console.error("Error registering user:", error);
       });
   };
-
+ 
   return (
     <div className="container mt-5">
       <h2>Register</h2>
@@ -88,5 +88,6 @@ function Register() {
     </div>
   );
 }
-
+ 
 export default Register;
+
