@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import Navbar from "./components/Navbar"; // ✅ Navbar imported once
+
+import ProtectedLayout from "./components/ProtectedLayout"; // ✅ Only imported once
 import LandingPage from "./pages/LandingPage";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
@@ -16,14 +19,12 @@ import RouteList from "./components/RouteManagement/RouteList";
 import AddRoute from "./components/RouteManagement/AddRoute";
 import ManageTickets from "./components/Admin/ManageTickets";
 import ManageRoutes from "./components/Admin/ManageRoutes";
-import NotFound from "./pages/NotFound";
 
 import { AuthProvider } from "./context/AuthContext";
 import { DataProvider } from "./context/DataContext";
-import PrivateRoute from "./utils/PrivateRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-import './App.css';
+import "./App.css";
 
 function App() {
   return (
@@ -31,116 +32,100 @@ function App() {
       <AuthProvider>
         <DataProvider>
           <div className="App">
+            <Navbar /> {/* ✅ Navbar visible on all pages */}
             <div className="container">
               <ErrorBoundary>
                 <Routes>
-                  {/* Landing Page */}
+                  {/* Public Routes */}
                   <Route path="/" element={<LandingPage />} />
-
-                  {/* Login Page */}
                   <Route path="/login" element={<Login />} />
-
-                  {/* Register Page */}
                   <Route path="/register" element={<Register />} />
 
-                  {/* Admin Dashboard Routes */}
+                  {/* Admin Routes */}
                   <Route
                     path="/admin"
                     element={
-                      <PrivateRoute allowedRoles={["ADMIN"]}>
+                      <ProtectedLayout allowedRoles={["ADMIN"]}>
                         <AdminDashboard />
-                      </PrivateRoute>
+                      </ProtectedLayout>
                     }
                   />
                   <Route
                     path="/admin/schedules"
                     element={
-                      <PrivateRoute allowedRoles={["ADMIN"]}>
+                      <ProtectedLayout allowedRoles={["ADMIN"]}>
                         <BusScheduleList />
-                      </PrivateRoute>
+                      </ProtectedLayout>
                     }
                   />
                   <Route
                     path="/admin/schedules/add"
                     element={
-                      <PrivateRoute allowedRoles={["ADMIN"]}>
+                      <ProtectedLayout allowedRoles={["ADMIN"]}>
                         <AddBusSchedule />
-                      </PrivateRoute>
+                      </ProtectedLayout>
                     }
                   />
                   <Route
                     path="/admin/tickets"
                     element={
-                      <PrivateRoute allowedRoles={["ADMIN"]}>
+                      <ProtectedLayout allowedRoles={["ADMIN"]}>
                         <ManageTickets />
-                      </PrivateRoute>
+                      </ProtectedLayout>
                     }
                   />
                   <Route
                     path="/admin/routes"
                     element={
-                      <PrivateRoute allowedRoles={["ADMIN"]}>
+                      <ProtectedLayout allowedRoles={["ADMIN"]}>
                         <ManageRoutes />
-                      </PrivateRoute>
+                      </ProtectedLayout>
                     }
                   />
                   <Route
                     path="/admin/routes/add"
                     element={
-                      <PrivateRoute allowedRoles={["ADMIN"]}>
+                      <ProtectedLayout allowedRoles={["ADMIN"]}>
                         <AddRoute />
-                      </PrivateRoute>
+                      </ProtectedLayout>
                     }
                   />
 
-                  {/* User Dashboard Routes */}
+                  {/* User Routes */}
                   <Route
                     path="/user"
                     element={
-                      <PrivateRoute allowedRoles={["USER"]}>
+                      <ProtectedLayout allowedRoles={["USER"]}>
                         <UserDashboard />
-                      </PrivateRoute>
+                      </ProtectedLayout>
                     }
                   />
                   <Route
                     path="/user/tickets"
                     element={
-                      <PrivateRoute allowedRoles={["USER"]}>
+                      <ProtectedLayout allowedRoles={["USER"]}>
                         <TicketList />
-                      </PrivateRoute>
+                      </ProtectedLayout>
                     }
                   />
                   <Route
                     path="/user/book-ticket"
                     element={
-                      <PrivateRoute allowedRoles={["USER"]}>
+                      <ProtectedLayout allowedRoles={["USER"]}>
                         <BookTicket />
-                      </PrivateRoute>
+                      </ProtectedLayout>
                     }
                   />
                   <Route
                     path="/user/routes"
                     element={
-                      <PrivateRoute allowedRoles={["USER"]}>
+                      <ProtectedLayout allowedRoles={["USER"]}>
                         <RouteList />
-                      </PrivateRoute>
+                      </ProtectedLayout>
                     }
                   />
 
-                  {/* Additional Route */}
-                  <Route
-                    path="/schedules/add"
-                    element={
-                      <PrivateRoute>
-                        <AddBusSchedule />
-                      </PrivateRoute>
-                    }
-                  />
-
-                  {/* Route List */}
-                  <Route path="/routes" element={<RouteList />} />
-
-                  {/* Default Redirect */}
+                  {/* Catch-All Redirect */}
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
               </ErrorBoundary>

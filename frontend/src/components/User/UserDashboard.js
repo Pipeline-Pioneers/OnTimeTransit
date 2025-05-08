@@ -120,7 +120,7 @@ function UserDashboard() {
 
   return (
     <div className="container mt-5">
-      <Navbar />
+      
       <h1>Available Routes</h1>
       {loading && <div className="spinner-border text-primary" role="status"><span className="visually-hidden">Loading...</span></div>}
       <table className="table table-striped">

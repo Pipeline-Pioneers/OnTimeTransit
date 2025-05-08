@@ -2,21 +2,21 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AuthService from "../../services/AuthService";
-
+ 
 function Login() {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
   const navigate = useNavigate();
-
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setCredentials({ ...credentials, [name]: value });
   };
-
+ 
   const handleLogin = (e) => {
     e.preventDefault();
-
+ 
     console.log("Credentials being sent to the backend:", credentials);
-
+ 
     AuthService.login(credentials)
       .then((role) => {
         console.log("User role:", role);
@@ -35,7 +35,7 @@ function Login() {
         console.error("Error logging in:", error);
       });
   };
-
+ 
   return (
     <div className="container mt-5">
       <h2>Login</h2>
@@ -69,5 +69,5 @@ function Login() {
     </div>
   );
 }
-
+ 
 export default Login;
