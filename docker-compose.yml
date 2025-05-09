@@ -13,7 +13,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/user-service
       SPRING_DATASOURCE_USERNAME: luk
       SPRING_DATASOURCE_PASSWORD: SkorpionEVO47!
-    restart: on-failure
+   
 
   # Ticket Service
   ticket-service:
