@@ -50,7 +50,14 @@ const ApiService = {
       throw new Error("Failed to add route. Please try again.");
     }
   },
-  updateRoute: (id, route) => axiosInstance.put(`${ROUTE_SERVICE_URL}/${id}`, route).then((res) => res.data).catch(handleApiError),
+  updateRoute: (id, route) =>
+     axiosInstance
+  .put(`${ROUTE_SERVICE_URL}/${id}`, route)
+  .then((res) => res.data)
+  .catch(handleApiError),
+
+  
+
   deleteRoute: async (id) => {
     try {
       await axios.delete(`http://localhost:8084/api/routes/${id}`);

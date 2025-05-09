@@ -7,6 +7,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import java.util.List;
 
+
+
 @RestController
 @RequestMapping("/api/routes")
 @CrossOrigin(origins = "http://localhost:3000") // Allow requests from the frontend
@@ -44,6 +46,7 @@ public class RouteController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public Route updateRoute(@PathVariable Long id, @RequestBody Route updatedRoute) {
         Route existingRoute = routeService.getRouteById(id);

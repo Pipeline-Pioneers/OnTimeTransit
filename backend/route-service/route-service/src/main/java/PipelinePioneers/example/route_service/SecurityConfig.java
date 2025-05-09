@@ -16,7 +16,8 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
             .authorizeHttpRequests()
             .requestMatchers(HttpMethod.DELETE, "/api/routes/**").permitAll() // Allow DELETE requests
-            .requestMatchers(HttpMethod.GET, "/api/routes").permitAll() // Allow GET requests
+            .requestMatchers(HttpMethod.GET, "/api/routes").permitAll() 
+            .requestMatchers(HttpMethod.PUT, "/api/routes/**").hasRole("ADMIN")// Allow GET requests
             .requestMatchers(HttpMethod.POST, "/api/routes").permitAll() // Allow POST requests temporarily
             .anyRequest().authenticated();
         return http.build();
