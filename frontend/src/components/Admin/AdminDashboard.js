@@ -1,29 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Card, CardContent, Typography, Button, TextField } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+  TextField,
+} from "@mui/material";
 import { motion } from "framer-motion";
 import { ApiService } from "../../services/ApiService";
-import Navbar from "../Navbar";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import "./AdminDashboard.css";
 
 function AdminDashboard() {
   const [routes, setRoutes] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [schedules, setSchedules] = useState([]);
-  const [analyticsData, setAnalyticsData] = useState({});
   const [notificationMessage, setNotificationMessage] = useState("");
 
   const navigate = useNavigate();
 
-  // Fetch data for routes, tickets, schedules, and analytics
   useEffect(() => {
     ApiService.getRoutes().then(setRoutes).catch(() => toast.error("Failed to fetch routes."));
     ApiService.getTickets().then(setTickets).catch(() => toast.error("Failed to fetch tickets."));
     ApiService.getSchedules().then(setSchedules).catch(() => toast.error("Failed to fetch schedules."));
-    ApiService.getAnalyticsSummary().then(setAnalyticsData).catch(() => toast.error("Failed to fetch analytics."));
+    ApiService.getAnalyticsSummary().catch(() => toast.error("Failed to fetch analytics."));
   }, []);
 
-  // Handle sending notifications
   const handleSendNotification = () => {
     if (!notificationMessage.trim()) {
       toast.error("Notification message cannot be empty.");
@@ -39,16 +46,25 @@ function AdminDashboard() {
 
   return (
     <div>
-      <Navbar />
-      <div className="container mt-5">
-        <Typography variant="h4" gutterBottom>
+      {/* Header */}
+      <AppBar position="static" className="admin-header">
+        <Toolbar>
+          <Typography variant="h6" style={{ flexGrow: 1 }}>
+            OnTimeTransit
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Main Dashboard */}
+      <Container className="admin-container">
+        <Typography variant="h4" gutterBottom className="admin-section-title">
           Admin Dashboard
         </Typography>
 
         {/* Analytics Section */}
         <Grid container spacing={3}>
           <Grid item xs={12} sm={4}>
-            <Card component={motion.div} whileHover={{ scale: 1.05 }}>
+            <Card component={motion.div} whileHover={{ scale: 1.05 }} className="admin-card">
               <CardContent>
                 <Typography variant="h6">Total Tickets</Typography>
                 <Typography variant="h4">{tickets.length}</Typography>
@@ -56,7 +72,7 @@ function AdminDashboard() {
             </Card>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Card component={motion.div} whileHover={{ scale: 1.05 }}>
+            <Card component={motion.div} whileHover={{ scale: 1.05 }} className="admin-card">
               <CardContent>
                 <Typography variant="h6">Total Routes</Typography>
                 <Typography variant="h4">{routes.length}</Typography>
@@ -64,7 +80,7 @@ function AdminDashboard() {
             </Card>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Card component={motion.div} whileHover={{ scale: 1.05 }}>
+            <Card component={motion.div} whileHover={{ scale: 1.05 }} className="admin-card">
               <CardContent>
                 <Typography variant="h6">Total Schedules</Typography>
                 <Typography variant="h4">{schedules.length}</Typography>
@@ -73,70 +89,63 @@ function AdminDashboard() {
           </Grid>
         </Grid>
 
-        {/* Manage Tickets Section */}
-        <div className="mt-5">
-          <Typography variant="h5" gutterBottom>
-            Manage Tickets
-          </Typography>
-          <Button variant="contained" color="primary" onClick={() => navigate("/admin/tickets")}>
+        {/* Manage Tickets */}
+        <div className="admin-section">
+          <Typography variant="h5" className="admin-section-title">Manage Tickets</Typography>
+          <Button variant="contained" color="primary" className="admin-button" onClick={() => navigate("/admin/tickets")}>
             View Tickets
           </Button>
         </div>
 
-        {/* Manage Routes Section */}
-        <div className="mt-5">
-          <Typography variant="h5" gutterBottom>
-            Manage Routes
-          </Typography>
-          <Button variant="contained" color="primary" onClick={() => navigate("/admin/routes")}>
+        {/* Manage Routes */}
+        <div className="admin-section">
+          <Typography variant="h5" className="admin-section-title">Manage Routes</Typography>
+          <Button variant="contained" color="primary" className="admin-button" onClick={() => navigate("/admin/routes")}>
             View Routes
           </Button>
-          <Button variant="contained" color="secondary" className="ms-3" onClick={() => navigate("/admin/routes/add")}>
+          <Button variant="contained" color="secondary" className="admin-button" onClick={() => navigate("/admin/routes/add")}>
             Add Route
           </Button>
         </div>
 
-        {/* Manage Schedules Section */}
-        <div className="mt-5">
-          <Typography variant="h5" gutterBottom>
-            Manage Schedules
-          </Typography>
-          <Button variant="contained" color="primary" onClick={() => navigate("/admin/schedules")}>
+        {/* Manage Schedules */}
+        <div className="admin-section">
+          <Typography variant="h5" className="admin-section-title">Manage Schedules</Typography>
+          <Button variant="contained" color="primary" className="admin-button" onClick={() => navigate("/admin/schedules")}>
             View Schedules
           </Button>
-          <Button variant="contained" color="secondary" className="ms-3" onClick={() => navigate("/admin/schedules/add")}>
+          <Button variant="contained" color="secondary" className="admin-button" onClick={() => navigate("/admin/schedules/add")}>
             Add Schedule
           </Button>
-          <Button variant="contained" color="success" className="ms-3" onClick={() => navigate("/admin/schedules/assign")}>
+          <Button variant="contained" color="success" className="admin-button" onClick={() => navigate("/admin/schedules/assign")}>
             Assign Schedule
           </Button>
-          <Button
-            variant="contained"
-            color="success"
-            className="ms-3"
-            onClick={() => navigate("/admin/schedules/assign-existing")}
-          >
+          <Button variant="contained" color="success" className="admin-button" onClick={() => navigate("/admin/schedules/assign-existing")}>
             Assign Existing Schedule
           </Button>
         </div>
 
-        {/* Send Notifications Section */}
-        <div className="mt-5">
-          <Typography variant="h5" gutterBottom>
-            Send Notifications
-          </Typography>
+        {/* Notifications */}
+        <div className="admin-section">
+          <Typography variant="h5" className="admin-section-title">Send Notifications</Typography>
           <TextField
             label="Notification Message"
             variant="outlined"
             fullWidth
             value={notificationMessage}
             onChange={(e) => setNotificationMessage(e.target.value)}
+            className="notification-input"
           />
-          <Button variant="contained" color="secondary" className="mt-3" onClick={handleSendNotification}>
+          <Button variant="contained" color="secondary" onClick={handleSendNotification}>
             Send Notification
           </Button>
         </div>
-      </div>
+      </Container>
+
+      {/* Footer */}
+      <footer className="admin-footer">
+        © {new Date(2025).getFullYear()} OnTimeTransit. All rights reserved.
+      </footer>
     </div>
   );
 }

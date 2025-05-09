@@ -1,0 +1,112 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f7fa;
+  }
+  
+  /* Header */
+.login-header {
+  background-color: #0d6efd;
+  color: white;
+  padding: 16px 32px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;  /* centers content horizontally */
+  align-items: center;      /* centers content vertically */
+  height: 100px;            /* adjust as needed */
+  gap: 10px;
+}
+
+.logo {
+  height: 60px;    /* logo height increased for better visibility */
+  width: auto;     /* maintain aspect ratio */
+}
+
+  
+  /* Login Container */
+  .login-container {
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 32px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-title {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  /* Form */
+  .login-form .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .login-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .btn-login {
+    width: 100%;
+    padding: 10px;
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  .btn-login:hover {
+    background-color: #0b5ed7;
+  }
+  
+  /* Links */
+  .form-links {
+    text-align: right;
+    margin-top: -8px;
+    margin-bottom: 12px;
+  }
+  
+  .forgot-password-link,
+  .signup-prompt a {
+    color: #0d6efd;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .forgot-password-link:hover,
+  .signup-prompt a:hover {
+    text-decoration: underline;
+  }
+  
+  .signup-prompt {
+    text-align: center;
+    margin-top: 16px;
+  }
+  
+  /* Footer */
+  .login-footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f0f0;
+    color: #555;
+    font-size: 0.9rem;
+    margin-top: 60px;
+  }
+  

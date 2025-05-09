@@ -1,0 +1,43 @@
+/* Register.css */
+
+.register-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .register-header {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+  }
+  
+  .register-footer {
+    text-align: center;
+    padding: 10px;
+    margin-top: auto;
+    border-top: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    font-size: 14px;
+  }
+  
+  .form-box {
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.06);
+  }
+  
+  /* Login hyperlink styling */
+  .login-link {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .login-link:hover {
+    text-decoration: underline;
+  }
+  

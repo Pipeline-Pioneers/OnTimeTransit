@@ -1,0 +1,52 @@
+/* AdminDashboard.css */
+
+.admin-header {
+  background-color: #1976d2; /* MUI primary color */
+}
+
+.admin-container {
+  padding: 2rem 0;
+}
+
+.admin-section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.admin-section-title {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-card {
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.admin-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.admin-button {
+  margin: 0.5rem 0.5rem 0 0;
+}
+
+.notification-input {
+  margin: 1rem 0;
+}
+
+.admin-footer {
+  text-align: center;
+  margin-top: 4rem;
+  padding: 1rem;
+  background-color: #eeeeee;
+  color: #555;
+  font-size: 0.9rem;
+  border-top: 1px solid #ddd;
+}

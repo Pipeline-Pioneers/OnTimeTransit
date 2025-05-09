@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import AuthService from "../../services/AuthService";
+import "./Login.css";
 
 function Login() {
   const [credentials, setCredentials] = useState({ username: "", password: "" });
@@ -14,17 +15,11 @@ function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-    console.log("Credentials being sent to the backend:", credentials);
-
     AuthService.login(credentials)
       .then((role) => {
-        console.log("User role:", role);
         if (role === "ADMIN") {
-          console.log("Navigating to admin dashboard...");
           navigate("/admin");
         } else if (role === "USER") {
-          console.log("Navigating to user dashboard...");
           navigate("/user");
         } else {
           toast.error("Unexpected role received from the server.");
@@ -37,36 +32,56 @@ function Login() {
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div className="mb-3">
-          <label className="form-label">Username</label>
-          <input
-            type="text"
-            className="form-control"
-            name="username"
-            value={credentials.username}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            name="password"
-            value={credentials.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">
-          Login
-        </button>
-      </form>
-    </div>
+    <>
+     <header className="login-header">
+  <img src="Logo.png" alt="On Time Transit Logo" className="logo" />
+</header>
+
+
+      <main className="login-container">
+        <h2 className="login-title">Login</h2>
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="form-group">
+            <label>Username</label>
+            <input
+              type="text"
+              name="username"
+              value={credentials.username}
+              onChange={handleChange}
+              required
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              value={credentials.password}
+              onChange={handleChange}
+              required
+              className="form-control"
+            />
+          </div>
+
+          <div className="form-links">
+            <Link to="/forgot-password" className="forgot-password-link">
+              Forgot Password?
+            </Link>
+          </div>
+
+          <button type="submit" className="btn-login">Login</button>
+
+          <p className="signup-prompt">
+            Don't have an account? <Link to="/register">Sign up</Link>
+          </p>
+        </form>
+      </main>
+
+      <footer className="login-footer">
+        © 2025 On Time Transit. All rights reserved.
+      </footer>
+    </>
   );
 }
 
