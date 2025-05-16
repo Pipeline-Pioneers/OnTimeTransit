@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   # User Service
@@ -50,6 +50,32 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/schedule-service
       SPRING_DATASOURCE_USERNAME: luk
       SPRING_DATASOURCE_PASSWORD: SkorpionEVO47!
+
+  # Notification Service
+  notification-service:
+    build:
+      context: ./backend/notification-service/notification-service
+      dockerfile: Dockerfile
+    container_name: notification-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/notification-service
+      SPRING_DATASOURCE_USERNAME: luk
+      SPRING_DATASOURCE_PASSWORD: SkorpionEVO47!
+
+  # Analytics Service
+  analytics-service:
+    build:
+      context: ./backend/analytics-service/analytics-service
+      dockerfile: Dockerfile
+    container_name: analytics-service
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:5432/analytics-service
+      SPRING_DATASOURCE_USERNAME: luk
+      SPRING_DATASOURCE_PASSWORD: SkorpionEVO47!        
 
   # pgAdmin (Optional: Only needed if you want to use it)
   pgadmin:
