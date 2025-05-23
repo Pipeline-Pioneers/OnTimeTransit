@@ -1,81 +1,52 @@
 pipeline {
     agent any
 
-    options {
-        timestamps()
-    }
-
     environment {
-        DOCKER_COMPOSE_FILE = 'docker-compose.yml'
+        // Your env vars here if any
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git url: 'https://github.com/yourusername/your-repo.git', branch: 'main'
             }
         }
 
         stage('Clean Docker Resources') {
             steps {
-                echo '🧹 Cleaning old Docker containers and images...'
-                sh '''
-                    docker compose down --remove-orphans
-                    docker system prune -f
-                '''
+                echo 'Cleaning Docker resources...'
+                // Your cleaning commands here, e.g. sh 'docker system prune -f'
             }
         }
 
         stage('Build Microservices') {
             steps {
-                script {
-                    def services = ['user-service', 'notification-service', 'analytics-service', 'ticket-service', 'route-service', 'schedule-service']
-                    for (svc in services) {
-                        dir("backend/${svc}") {
-                            echo "🔨 Building ${svc}"
-                            sh 'mvn clean package -DskipTests'
-                        }
-                    }
-                }
+                echo 'Building microservices...'
+                // Your build commands here, e.g. sh 'mvn clean package'
             }
         }
 
-        // Optional: Uncomment to run tests
-        // stage('Run Unit Tests') {
-        //     steps {
-        //         script {
-        //             def services = ['user-service', 'notification-service', 'analytics-service', 'ticket-service', 'route-service', 'schedule-service']
-        //             for (svc in services) {
-        //                 dir("backend/${svc}") {
-        //                     echo "🧪 Testing ${svc}"
-        //                     sh 'mvn test'
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
         stage('Build Docker Images') {
             steps {
-                echo '🐳 Building Docker images...'
-                sh 'docker compose build --no-cache'
+                echo 'Building Docker images...'
+                // Your docker build commands here, e.g. sh 'docker build ...'
             }
         }
 
         stage('Deploy All Services') {
             steps {
-                echo '🚀 Deploying services...'
-                sh 'docker compose up -d --force-recreate'
+                echo 'Deploying all services...'
+                // Your deployment commands here, e.g. sh 'docker-compose up -d'
             }
         }
     }
 
     post {
-        success {
-            echo '✅ Deployment successful!'
-        }
         failure {
             echo '❌ Build or deployment failed!'
+        }
+        success {
+            echo '✅ Pipeline completed successfully!'
         }
     }
 }
