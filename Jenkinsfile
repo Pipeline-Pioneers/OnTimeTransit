@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        // Your env vars here if any
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -15,28 +11,28 @@ pipeline {
         stage('Clean Docker Resources') {
             steps {
                 echo 'Cleaning Docker resources...'
-                // Your cleaning commands here, e.g. sh 'docker system prune -f'
+                // Add cleaning commands here
             }
         }
 
         stage('Build Microservices') {
             steps {
                 echo 'Building microservices...'
-                // Your build commands here, e.g. sh 'mvn clean package'
+                // Add build commands here
             }
         }
 
         stage('Build Docker Images') {
             steps {
                 echo 'Building Docker images...'
-                // Your docker build commands here, e.g. sh 'docker build ...'
+                // Add docker build commands here
             }
         }
 
         stage('Deploy All Services') {
             steps {
                 echo 'Deploying all services...'
-                // Your deployment commands here, e.g. sh 'docker-compose up -d'
+                // Add deployment commands here
             }
         }
     }
