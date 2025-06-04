@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: route-service
+  labels:
+    app: route-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: route-service
+  template:
+    metadata:
+      labels:
+        app: route-service
+    spec:
+      containers:
+        - name: route-service
+          image: lucas100/route-service:latest
+          ports:
+            - containerPort: 8084
