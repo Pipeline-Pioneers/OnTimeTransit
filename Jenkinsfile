@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = 'your-dockerhub-username'
-        KUBECONFIG = credentials('kubeconfig') // your Jenkins secret for kubeconfig
+        REGISTRY = 'lucas100'
+        KUBECONFIG = credentials('kubeconfig') // Jenkins secret for kubeconfig
     }
 
     stages {
@@ -32,11 +32,32 @@ pipeline {
                     for dir in backend/*; do
                         if [ -d "$dir" ]; then
                             cd $dir/$dir
-                            mvn clean package -DskipTests
+                            mvn clean compile
                             cd ../../../
                         fi
                     done
                 '''
+            }
+        }
+
+        stage('Test Microservices') {
+            steps {
+                echo 'Running tests for microservices...'
+                sh '''
+                    for dir in backend/*; do
+                        if [ -d "$dir" ]; then
+                            cd $dir/$dir
+                            mvn test
+                            cd ../../../
+                        fi
+                    done
+                '''
+            }
+
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                }
             }
         }
 
