@@ -75,11 +75,14 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-            steps {
-                echo 'Deploying to Kubernetes...'
-                sh 'kubectl apply -f k8s/'
-            }
+    steps {
+        echo 'Deploying to Kubernetes...'
+        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+            sh 'kubectl apply -f k8s/'
         }
+    }
+}
+
     }
 
     post {
