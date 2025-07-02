@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+     triggers {
+        // Poll SCM every 2 minutes for changes
+        pollSCM('H/2 * * * *')
+        // Alternative: Use GitHub webhook (requires GitHub plugin and webhook setup)
+        // githubPush()
+
     environment {
         REGISTRY = 'lucas100'
         KUBECONFIG = credentials('kubeconfig') // Jenkins secret for kubeconfig
