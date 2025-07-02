@@ -100,5 +100,20 @@ services:
     stdin_open: true
     tty: true
 
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 4g  
+
 volumes:
   pgadmin_data:
+  jenkins_home:
