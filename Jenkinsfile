@@ -44,9 +44,9 @@ pipeline {
                 sh '''
                     for dir in backend/*; do
                         if [ -d "$dir" ]; then
-                            cd "$dir"
+                            cd "$dir/$dir"
                             mvn clean package
-                            cd ../../
+                            cd ../../../
                         fi
                     done
                 '''
@@ -59,9 +59,9 @@ pipeline {
                 sh '''
                     for dir in backend/*; do
                         if [ -d "$dir" ]; then
-                            cd "$dir"
+                            cd "$dir/$dir"
                             mvn test
-                            cd ../../
+                            cd ../../../
                         fi
                     done
                 '''
