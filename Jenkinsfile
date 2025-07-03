@@ -1,15 +1,15 @@
 pipeline {
     agent any
 
-     triggers {
-        // Poll SCM every 2 minutes for changes
-        pollSCM('H/2 * * * *')
-        // Alternative: Use GitHub webhook (requires GitHub plugin and webhook setup)
-        // githubPush()
-
     environment {
         REGISTRY = 'lucas100'
         KUBECONFIG = credentials('kubeconfig') // Jenkins secret for kubeconfig
+    }
+
+    triggers {
+        // Poll SCM every 2 minutes for changes
+        pollSCM('H/2 * * * *')
+        // githubPush() // Uncomment if using GitHub webhook
     }
 
     stages {
@@ -59,7 +59,6 @@ pipeline {
                     done
                 '''
             }
-
             post {
                 always {
                     junit '**/target/surefire-reports/*.xml'
@@ -81,14 +80,13 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-    steps {
-        echo 'Deploying to Kubernetes...'
-        withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-            sh 'kubectl apply -f k8s/'
+            steps {
+                echo 'Deploying to Kubernetes...'
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'kubectl apply -f k8s/'
+                }
+            }
         }
-    }
-}
-
     }
 
     post {
@@ -99,5 +97,4 @@ pipeline {
             echo '✅ Pipeline completed successfully!'
         }
     }
-}
 }
