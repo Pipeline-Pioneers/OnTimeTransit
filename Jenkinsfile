@@ -1,15 +1,6 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Check Tools') {
-            steps {
-                sh 'docker --version'
-                sh 'mvn -v'
-            }
-        }
-    }
-
     environment {
         REGISTRY = 'lucas100'
         KUBECONFIG = credentials('kubeconfig') // Jenkins secret for kubeconfig
@@ -22,6 +13,13 @@ pipeline {
     }
 
     stages {
+        stage('Check Tools') {
+            steps {
+                sh 'docker --version'
+                sh 'mvn -v'
+            }
+        }
+
         stage('Checkout') {
             steps {
                 git url: 'https://github.com/LuK-One/OnTimeTransit.git', branch: 'main'
@@ -83,27 +81,3 @@ pipeline {
                     for (svc in services) {
                         sh "docker build -t ${REGISTRY}/${svc}:latest backend/${svc}/${svc}"
                         sh "docker push ${REGISTRY}/${svc}:latest"
-                    }
-                }
-            }
-        }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                echo 'Deploying to Kubernetes...'
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    sh 'kubectl apply -f k8s/'
-                }
-            }
-        }
-    }
-
-    post {
-        failure {
-            echo '❌ Build or deployment failed!'
-        }
-        success {
-            echo '✅ Pipeline completed successfully!'
-        }
-    }
-}
