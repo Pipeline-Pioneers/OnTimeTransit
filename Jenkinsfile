@@ -81,3 +81,27 @@ pipeline {
                     for (svc in services) {
                         sh "docker build -t ${REGISTRY}/${svc}:latest backend/${svc}/${svc}"
                         sh "docker push ${REGISTRY}/${svc}:latest"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                echo 'Deploying to Kubernetes...'
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'kubectl apply -f k8s/'
+                }
+            }
+        }
+    } // <-- closes 'stages'
+
+    post {
+        failure {
+            echo '❌ Build or deployment failed!'
+        }
+        success {
+            echo '✅ Pipeline completed successfully!'
+        }
+    }
+} // <-- closes 'pipeline'
