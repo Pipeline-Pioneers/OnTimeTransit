@@ -38,7 +38,7 @@ pipeline {
                     for dir in backend/*; do
                         if [ -d "$dir" ]; then
                             cd "$dir"
-                            mvn clean compile
+                            mvn clean package
                             cd ../../
                         fi
                     done
