@@ -7,7 +7,6 @@ pipeline {
     }
 
     triggers {
-        // Poll SCM every 2 minutes for changes
         pollSCM('H/2 * * * *')
         // githubPush() // Uncomment if using GitHub webhook
     }
@@ -43,10 +42,11 @@ pipeline {
                 echo 'Building microservices with Maven...'
                 sh '''
                     for dir in backend/*; do
-                        if [ -d "$dir" ]; then
-                            cd "$dir/$dir"
-                            mvn clean package
-                            cd ../../../
+                        if [ -f "$dir/pom.xml" ]; then
+                            echo "Building $dir"
+                            cd "$dir"
+                            mvn clean install
+                            cd - > /dev/null
                         fi
                     done
                 '''
@@ -58,10 +58,11 @@ pipeline {
                 echo 'Running tests for microservices...'
                 sh '''
                     for dir in backend/*; do
-                        if [ -d "$dir" ]; then
-                            cd "$dir/$dir"
+                        if [ -f "$dir/pom.xml" ]; then
+                            echo "Testing $dir"
+                            cd "$dir"
                             mvn test
-                            cd ../../../
+                            cd - > /dev/null
                         fi
                     done
                 '''
@@ -79,7 +80,7 @@ pipeline {
                 script {
                     def services = ['user-service', 'notification-service', 'analytics-service', 'ticket-service', 'route-service', 'schedule-service', 'frontend']
                     for (svc in services) {
-                        sh "docker build -t ${REGISTRY}/${svc}:latest backend/${svc}/${svc}"
+                        sh "docker build -t ${REGISTRY}/${svc}:latest backend/${svc}"
                         sh "docker push ${REGISTRY}/${svc}:latest"
                     }
                 }
@@ -94,7 +95,7 @@ pipeline {
                 }
             }
         }
-    } // <-- closes 'stages'
+    }
 
     post {
         failure {
@@ -104,4 +105,4 @@ pipeline {
             echo '✅ Pipeline completed successfully!'
         }
     }
-} // <-- closes 'pipeline'
+}
