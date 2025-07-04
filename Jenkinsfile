@@ -3,11 +3,12 @@ pipeline {
 
     environment {
         REGISTRY = 'lucas100'
-        KUBECONFIG = credentials('kubeconfig')
+        KUBECONFIG = credentials('kubeconfig') // Jenkins secret for kubeconfig
     }
 
     triggers {
         pollSCM('H/2 * * * *')
+        // githubPush() // Uncomment if using GitHub webhook
     }
 
     stages {
@@ -15,6 +16,12 @@ pipeline {
             steps {
                 sh 'docker --version'
                 sh 'mvn -v'
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/LuK-One/OnTimeTransit.git', branch: 'main'
             }
         }
 
