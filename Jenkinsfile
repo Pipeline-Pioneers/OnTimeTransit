@@ -3,11 +3,13 @@ pipeline {
 
     environment {
         REGISTRY = 'lucas100'
-        KUBECONFIG = credentials('kubeconfig')
+        KUBECONFIG = credentials('kubeconfig') // Jenkins secret for kubeconfig
     }
 
     triggers {
+        // Poll SCM every 2 minutes for changes
         pollSCM('H/2 * * * *')
+        // githubPush() // Uncomment if using GitHub webhook
     }
 
     stages {
@@ -15,6 +17,12 @@ pipeline {
             steps {
                 sh 'docker --version'
                 sh 'mvn -v'
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/LuK-One/OnTimeTransit.git', branch: 'main'
             }
         }
 
@@ -35,11 +43,10 @@ pipeline {
                 echo 'Building microservices with Maven...'
                 sh '''
                     for dir in backend/*; do
-                        if [ -f "$dir/pom.xml" ]; then
-                            echo "Building $dir"
+                        if [ -d "$dir" ]; then
                             cd "$dir"
-                            mvn clean install
-                            cd - > /dev/null
+                            mvn clean package
+                            cd ../../
                         fi
                     done
                 '''
@@ -51,11 +58,10 @@ pipeline {
                 echo 'Running tests for microservices...'
                 sh '''
                     for dir in backend/*; do
-                        if [ -f "$dir/pom.xml" ]; then
-                            echo "Testing $dir"
+                        if [ -d "$dir" ]; then
                             cd "$dir"
                             mvn test
-                            cd - > /dev/null
+                            cd ../../
                         fi
                     done
                 '''
@@ -73,7 +79,7 @@ pipeline {
                 script {
                     def services = ['user-service', 'notification-service', 'analytics-service', 'ticket-service', 'route-service', 'schedule-service', 'frontend']
                     for (svc in services) {
-                        sh "docker build -t ${REGISTRY}/${svc}:latest backend/${svc}"
+                        sh "docker build -t ${REGISTRY}/${svc}:latest backend/${svc}/${svc}"
                         sh "docker push ${REGISTRY}/${svc}:latest"
                     }
                 }
@@ -88,7 +94,7 @@ pipeline {
                 }
             }
         }
-    }
+    } // <-- closes 'stages'
 
     post {
         failure {
@@ -98,4 +104,4 @@ pipeline {
             echo '✅ Pipeline completed successfully!'
         }
     }
-}
+} // <-- closes 'pipeline'
