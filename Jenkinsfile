@@ -13,6 +13,13 @@ pipeline {
     }
 
     stages {
+
+        stage('Debug Git') {
+            steps {
+                sh 'git status || echo "⚠️ Still not in a Git repo"'
+            }
+`       }
+
         stage('Check Tools') {
             steps {
                 sh 'docker --version'
