@@ -7,18 +7,23 @@ pipeline {
     }
 
     triggers {
-        // Poll SCM every 2 minutes for changes
         pollSCM('H/2 * * * *')
         // githubPush() // Uncomment if using GitHub webhook
     }
 
     stages {
 
+        stage('Test') {
+            steps {
+                echo '✅ Hello from Jenkins!'
+            }
+        }
+
         stage('Debug Git') {
             steps {
                 sh 'git status || echo "⚠️ Still not in a Git repo"'
             }
-`       }
+        }
 
         stage('Check Tools') {
             steps {
@@ -101,7 +106,7 @@ pipeline {
                 }
             }
         }
-    } // <-- closes 'stages'
+    }
 
     post {
         failure {
@@ -111,4 +116,4 @@ pipeline {
             echo '✅ Pipeline completed successfully!'
         }
     }
-} // <-- closes 'pipeline'
+}
