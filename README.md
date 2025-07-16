@@ -1,42 +1,36 @@
-###🚍 OnTimeTransit
+🚍 OnTimeTransit
 OnTimeTransit is a full-stack Bus Management System built to streamline public transport operations with modern technologies. It supports route planning, bus scheduling, ticket management, and role-based dashboards for users and administrators.
 
 The platform follows a microservices architecture with a React frontend and Spring Boot backend, all containerized with Docker for scalability and ease of deployment.
 
-###✨ Features
-###🔐 Authentication
+✨ Features
+🔐 Authentication
+Secure login & registration for Users and Admins
 
--Secure login & registration for Users and Admins
+🗺️ Route Management
+Add, update, and view bus routes
 
-###🗺️ Route Management
-
--Add, update, and view bus routes
-
-###🕒 Schedule Management
-
+🕒 Schedule Management
 Create and update bus schedules
 
-###🎟️ Ticketing System
+🎟️ Ticketing System
+Book, cancel, and manage tickets
 
--Book, cancel, and manage tickets
+📊 Analytics & Notifications
+Real-time insights and alerting
 
-###📊 Analytics & Notifications
+🧑‍💼 Role-Based Dashboards
+Admin and user-specific views and controls
 
--Real-time insights and alerting
+🧱 Tech Stack
+Layer	Technology
+Frontend	React, React Router, Framer Motion, React Toastify
+Backend	Java 17+, Spring Boot Microservices
+Services	User, Route, Schedule, Ticket, Analytics, Notification
+Database	Per-service SQL databases (see individual configurations)
+Containerization	Docker, Docker Compose
 
-###🧑‍💼 Role-Based Dashboards
-
--Admin and user-specific views and controls
-
-###🧱 Tech Stack
--Layer	Technology
--Frontend	React, React Router, Framer Motion, React Toastify
--Backend	Java 17+, Spring Boot Microservices
--Services	User, Route, Schedule, Ticket, Analytics, Notification
--Database	Per-service SQL databases (see individual configs)
--Containerization	Docker, Docker Compose
-
-###📁 Project Structure
+📁 Project Structure
 sql
 Copy
 Edit
@@ -52,18 +46,18 @@ ontimetransit/
 │   └── ontime-transit-client/
 ├── docker-compose.yml
 └── README.md
-###🚀 Getting Started
-##✅ Prerequisites
--Ensure the following are installed on your machine:
+🚀 Getting Started
+✅ Prerequisites
+Ensure the following are installed on your machine:
 
--Node.js & npm
+Node.js & npm
 
--Java 17+
+Java 17+
 
--Docker & Docker Compose
+Docker & Docker Compose
 
-###⚙️ Setup Instructions
--Clone the repository:
+⚙️ Setup Instructions
+Clone the repository:
 
 bash
 Copy
@@ -90,41 +84,39 @@ Frontend: http://localhost:3000
 
 Backend: Refer to individual service ports in docker-compose.yml
 
-###🧑‍💻 Usage Guide
-User:
-
+🧑‍💻 Usage Guide
+👥 User
 Register and log in
 
 Search routes and view schedules
 
 Book, cancel, and view tickets
 
-Admin:
-
+👨‍💼 Admin
 Log in with admin credentials
 
 Manage bus routes, schedules, and tickets
 
 View platform analytics and send notifications
 
-###🤝 Contributing
+🤝 Contributing
 We welcome contributions from the community!
 
 Fork the repository
 
-Create your feature branch
+Create your feature branch:
 
 bash
 Copy
 Edit
 git checkout -b feature/YourFeature
-Commit your changes
+Commit your changes:
 
 bash
 Copy
 Edit
 git commit -m "Add: Description of your feature"
-Push to your branch
+Push to the branch:
 
 bash
 Copy
@@ -132,5 +124,5 @@ Edit
 git push origin feature/YourFeature
 Open a Pull Request
 
-###📝 License
+📝 License
 This project is licensed under the MIT License – see the LICENSE file for details.
